@@ -215,30 +215,31 @@ const KwabzUtils = {
   },
 
   /**
-   * Require user to be logged in. Handles Firebase initialization delay.
+   * Require user to be logged in. Handles Firebase initialization delay seamlessly.
    */
   requireLogin() {
-    const check = () => {
-      if (!KwabzStore.getCurrentUser()) {
-        KwabzUtils.toast('Please sign in to continue', 'info');
-        setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 1000);
-        return false;
-      }
-      return true;
-    };
-
-    if (KwabzStore.getSyncStatus() === 'syncing') {
-      KwabzStore.on('user_changed', () => {
-        if (!KwabzStore.getCurrentUser()) {
-          check();
-        }
-      });
-      return true; // Assume okay for now to prevent flash-redirect
+    // If no active user right now AND no cached optimistic auth, we know they are not logged in.
+    if (!KwabzStore.getCurrentUser() && !localStorage.getItem('kwabz_auth_cache')) {
+      document.documentElement.style.display = 'none'; // prevent html flash
+      window.location.replace('login.html');
+      return false;
     }
 
-    return check();
+    if (KwabzStore.getSyncStatus() === 'syncing') {
+      // If we are syncing but they HAVE a cached auth, we assume they are logged in.
+      // This allows the page UI to render seamlessly without waiting.
+      
+      KwabzStore.on('user_changed', (user) => {
+        if (!user) {
+          // If Firebase finishes syncing and they actually AREN'T logged in (session expired)
+          localStorage.removeItem('kwabz_auth_cache');
+          window.location.replace('login.html');
+        }
+      });
+      return true; // Assume okay for now to prevent flash
+    }
+
+    return true; // Already verified!
   },
 
   /**

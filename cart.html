@@ -66,23 +66,27 @@
     }
   </style>
 </head>
-<body>
-  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 1.5rem; padding-top: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--outline-variant);">
-      <h1 style="font-family: var(--font-headline); font-size: 1.75rem; font-weight: 700;">Shopping Cart</h1>
-      <button onclick="window.history.back()" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface-container); cursor: pointer; border: none; transition: background 0.2s;">
+<body style="padding-top: 5rem; padding-bottom: 6rem;">
+  
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button onclick="window.history.back()" class="icon-btn">
         <span class="material-symbols-outlined">arrow_back</span>
       </button>
+      <span class="top-app-bar__title font-headline">Shopping Cart</span>
     </div>
+  </header>
 
+  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 1.5rem;">
     <!-- Auth Required -->
     <div id="authRequired" style="display: none;">
       <div style="text-align: center; padding: 2rem; background: var(--surface-container-lowest); border-radius: var(--radius-xl); border: 1px solid var(--outline-variant);">
         <span class="material-symbols-outlined" style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; display: block;">shopping_cart</span>
         <p style="color: var(--on-surface-variant); margin-bottom: 1rem;">Sign in to your account to manage your shopping cart</p>
         <div style="display: flex; gap: 1rem; justify-content: center;">
-          <a href="login.html" style="padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: var(--radius-lg); text-decoration: none; font-weight: 600;">Sign In</a>
-          <a href="signup.html" style="padding: 0.75rem 1.5rem; background: var(--surface-container); color: var(--on-surface); border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); text-decoration: none; font-weight: 600;">Create Account</a>
+          <a href="login.html" class="btn-primary" style="width:auto; padding: 0.75rem 1.5rem; font-size: 0.875rem;">Sign In</a>
+          <a href="signup.html" class="btn-secondary" style="width:auto; padding: 0.75rem 1.5rem;">Create Account</a>
         </div>
       </div>
     </div>
@@ -91,7 +95,7 @@
     <div id="cartContent" class="cart-layout" style="display: none;">
       <div id="cartItemsContainer" style="display: flex; flex-direction: column; gap: 1rem;"></div>
 
-      <div style="background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); border-radius: var(--radius-2xl); padding: 1.5rem; height: fit-content; position: sticky; top: 1.5rem;">
+      <div style="background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); border-radius: var(--radius-2xl); padding: 1.5rem; height: fit-content; position: sticky; top: 5.5rem;">
         <div style="font-family: var(--font-headline); font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem;">Order Summary</div>
 
         <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; font-size: 0.9rem; color: var(--on-surface-variant);">
@@ -109,10 +113,13 @@
           <span id="total">GH₵0.00</span>
         </div>
 
-        <button onclick="proceedToCheckout()" style="width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: var(--radius-lg); font-weight: 600; cursor: pointer; margin-top: 1.5rem;">Proceed to Checkout</button>
+        <button onclick="proceedToCheckout()" class="btn-primary" style="margin-top: 1.5rem; justify-content: center;">
+          Proceed to Checkout
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
 
         <div style="text-align: center; margin-top: 1.5rem;">
-          <a href="shop.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Continue Shopping</a>
+          <a href="shop.html" class="text-label-md" style="color: var(--outline); text-decoration: none;">Continue Shopping</a>
         </div>
       </div>
     </div>
@@ -123,10 +130,30 @@
         <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🛒</div>
         <h2 style="font-family: var(--font-headline); font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--on-surface-variant);">Your Cart is Empty</h2>
         <p style="color: var(--on-surface-variant); margin-bottom: 1.5rem;">Start shopping and add items to your cart</p>
-        <a href="shop.html" style="display: inline-block; padding: 0.875rem 1.5rem; background: var(--primary); color: white; border-radius: var(--radius-lg); text-decoration: none; font-weight: 600;">Continue Shopping</a>
+        <a href="shop.html" class="btn-primary" style="width:auto;">Browse Products</a>
       </div>
     </div>
   </div>
+
+  <!-- ═══ Bottom Navigation ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Shop</span>
+    </a>
+    <a href="cart.html" class="bottom-nav__item active" style="position:relative;">
+      <span class="material-symbols-outlined filled">shopping_cart</span>
+      <span>Cart</span>
+    </a>
+    <a id="authNavLink" href="login.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">person</span>
+      <span id="authNavText">Sign In</span>
+    </a>
+  </nav>
 
   <!-- Firebase & Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -203,7 +230,7 @@
 
       // ─── Smart Header Branding ───
       const sellerBranding = KwabzUtils.getCartBranding();
-      const headerTitle = document.querySelector('h1');
+      const headerTitle = document.querySelector('.top-app-bar__title');
       if (sellerBranding && headerTitle) {
         headerTitle.textContent = `${sellerBranding} Cart`;
       } else if (headerTitle) {

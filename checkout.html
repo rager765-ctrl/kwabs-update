@@ -6,7 +6,7 @@
   <title>Checkout — Kwabz Store</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body style="padding-top: 5rem; padding-bottom: 6rem;">
 
   <!-- ═══ Top App Bar ═══ -->
   <header class="top-app-bar glass">
@@ -143,6 +143,26 @@
       </p>
     </footer>
   </main>
+
+  <!-- ═══ Bottom Navigation ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Shop</span>
+    </a>
+    <a href="cart.html" class="bottom-nav__item active" style="position:relative;">
+      <span class="material-symbols-outlined filled">shopping_cart</span>
+      <span>Cart</span>
+    </a>
+    <a id="authNavLink" href="login.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">person</span>
+      <span id="authNavText">Sign In</span>
+    </a>
+  </nav>
 
   <!-- ═══ Scripts ═══ -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

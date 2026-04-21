@@ -198,22 +198,26 @@ body { -ms-overflow-style: none; scrollbar-width: none; }
   transform: translate(25%, -25%);
 }
 
-/* ─── Bottom Nav — Customer ─────────────────────────────────── */
+/* ─── Bottom Nav — Customer (iOS Dock Focus) ─── */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 420px;
   z-index: 50;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 5rem;
-  padding: 0 1rem;
-  background-color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+  height: 4.5rem;
+  padding: 0 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: saturate(180%) blur(25px);
+  -webkit-backdrop-filter: saturate(180%) blur(25px);
+  border-radius: 2.5rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .bottom-nav__item {
@@ -221,11 +225,12 @@ body { -ms-overflow-style: none; scrollbar-width: none; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  color: #b0b0b0;
-  transition: all 0.2s ease;
   position: relative;
+  flex: 1;
+  height: 100%;
+  color: #999999;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bottom-nav__item:hover {
@@ -234,32 +239,66 @@ body { -ms-overflow-style: none; scrollbar-width: none; }
 
 .bottom-nav__item.active {
   color: var(--on-surface);
-  transform: scale(1.08);
 }
 
-.bottom-nav__item span:last-child {
+/* Base Icon Style */
+.bottom-nav__item .material-symbols-outlined {
+  font-size: 1.6rem;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(0);
+}
+
+/* Animated Label Style */
+.bottom-nav__item span:not(.material-symbols-outlined):not(.cart-badge) {
   font-family: var(--font-body);
   font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  position: absolute;
+  bottom: 0.625rem;
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
 }
 
-/* ─── Bottom Nav — Admin ────────────────────────────────────── */
+/* Active State Transformations */
+.bottom-nav__item.active .material-symbols-outlined {
+  transform: translateY(-8px);
+}
+
+.bottom-nav__item.active span:not(.material-symbols-outlined):not(.cart-badge) {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Keep Cart Badge Relative to the Box */
+.bottom-nav__item .cart-badge {
+  top: 0.5rem !important;
+  right: calc(50% - 1.5rem) !important;
+}
+
+/* ─── Bottom Nav — Admin (Dark iOS Dock) ─── */
 .bottom-nav-admin {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 420px;
   z-index: 50;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 5rem;
+  height: 4.5rem;
   padding: 0 0.5rem;
-  background-color: #171717;
-  border-radius: 0.75rem 0.75rem 0 0;
-  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.2);
+  background-color: rgba(30, 30, 30, 0.75);
+  backdrop-filter: saturate(180%) blur(25px);
+  -webkit-backdrop-filter: saturate(180%) blur(25px);
+  border-radius: 2.5rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bottom-nav-admin__item {
@@ -267,26 +306,48 @@ body { -ms-overflow-style: none; scrollbar-width: none; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
+  position: relative;
+  flex: 1;
+  height: 100%;
   color: #737373;
-  border-radius: 0.75rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bottom-nav-admin__item:hover {
-  background: rgba(255,255,255,0.05);
-}
-
-.bottom-nav-admin__item.active {
-  background: rgba(255,255,255,0.1);
   color: #ffffff;
 }
 
-.bottom-nav-admin__item span:last-child {
+.bottom-nav-admin__item.active {
+  color: #ffffff;
+}
+
+.bottom-nav-admin__item .material-symbols-outlined {
+  font-size: 1.6rem;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(0);
+}
+
+.bottom-nav-admin__item span:not(.material-symbols-outlined) {
   font-family: var(--font-body);
   font-size: 0.625rem;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  position: absolute;
+  bottom: 0.625rem;
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+.bottom-nav-admin__item.active .material-symbols-outlined {
+  transform: translateY(-8px);
+}
+
+.bottom-nav-admin__item.active span:not(.material-symbols-outlined) {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 /* ─── Minimal Input ─────────────────────────────────────────── */

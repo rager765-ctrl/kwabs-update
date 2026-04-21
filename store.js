@@ -80,10 +80,12 @@ const KwabzStore = (() => {
     firebase.auth().onAuthStateChanged(user => {
       currentUser = user;
       if (user) {
+        localStorage.setItem('kwabz_auth_cache', user.uid);
         console.log('[KwabzStore] User logged in:', user.email);
         emit('user_changed', user);
         _setupCartListener();
       } else {
+        localStorage.removeItem('kwabz_auth_cache');
         console.log('[KwabzStore] User logged out');
         currentUser = null;
         emit('user_changed', null);
