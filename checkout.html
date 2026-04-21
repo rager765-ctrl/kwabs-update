@@ -166,6 +166,7 @@
     }
     
     KwabzStore.init();
+    if (!KwabzUtils.requireLogin()) throw new Error("Auth required");
     KwabzUtils.initAuthNavigation();
 
     // Pre-fill user info if logged in

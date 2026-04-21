@@ -85,9 +85,8 @@
         </div>
         <input id="searchInput" type="text" placeholder="Search campus gear..." 
           style="flex:1;border:none;background:transparent;font-family:inherit;font-size:0.875rem;color:var(--on-surface);outline:none;padding-right:0.5rem;" />
-        <button id="searchBtn" style="background:var(--primary);color:var(--on-primary);border:none;padding:0 1.5rem;font-family:var(--font-headline);font-weight:900;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;gap:0.5rem;">
+        <button id="searchBtn" style="background:var(--primary);color:var(--on-primary);border:none;padding:0 1.5rem;font-family:var(--font-headline);font-weight:900;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;">
           GO
-          <span class="material-symbols-outlined" style="font-size:1.125rem;">arrow_forward</span>
         </button>
       </div>
     </section>
@@ -200,6 +199,7 @@
     
     // Initialize KwabzStore
     KwabzStore.init();
+    if (!KwabzUtils.requireLogin()) throw new Error("Auth required");
     // ─── Initialize ───────────────────────────────────────────
     // Seed data is now handled by Firestore migration/initialization
     
