@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <main
+    style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;">
+
+    <div style="width:100%;max-width:24rem;">
+
+      <!-- Brand -->
+      <div style="text-align:center;margin-bottom:3rem;">
+        <h1 class="font-headline"
+          style="font-size:1.5rem;font-weight:900;letter-spacing:-0.05em;text-transform:uppercase;margin-bottom:0.25rem;">
+          Kwabz Store</h1>
+        <p class="text-label-sm" style="color:var(--outline);letter-spacing:0.2em;">Admin Portal</p>
+      </div>
+
+      <!-- Login Card -->
+      <div
+        style="background:var(--surface-container-lowest);border-radius:var(--radius-xl);padding:2rem;box-shadow:var(--shadow-ambient);">
+
+        <h2 class="font-headline text-headline-sm" style="margin-bottom:0.5rem;">Welcome back</h2>
+        <p class="text-body-sm" style="color:var(--outline);margin-bottom:2rem;">Sign in to manage your store.</p>
+
+        <form onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div class="form-group">
+            <label class="form-group__label">Email</label>
+            <input id="loginEmail" class="minimal-input" type="email" placeholder="Enter admin email" required />
+          </div>
+          <div class="form-group">
+            <label class="form-group__label">Password</label>
+            <input id="loginPassword" class="minimal-input" type="password" placeholder="••••••••" required />
+          </div>
+
+          <div id="loginError"
+            style="display:none;padding:0.75rem;background:var(--error-container);color:#410002;font-size:0.8125rem;font-weight:500;border-radius:var(--radius-lg);">
+          </div>
+
+          <button type="submit" class="btn-primary" id="loginBtn">
+            Sign In
+            <span class="material-symbols-outlined" style="font-size:1.125rem;">arrow_forward</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Back to store -->
+      <a href="shop.html"
+        style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:3rem;font-size:0.8125rem;color:var(--outline);font-weight:500;">
+        <span class="material-symbols-outlined" style="font-size:1rem;">arrow_back</span>
+        Back to Store
+      </a>
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    KwabzStore.init();
+    // Seed data is now handled by Firestore initialization
+
+    // If already logged in, redirect to dashboard
+    if (KwabzStore.isAdminLoggedIn()) {
+      window.location.href = 'admin-dashboard.html';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorBox = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorBox.style.display = 'none';
+      btn.disabled = true;
+      btn.innerHTML = 'Signing in...';
+
+      try {
+        const success = await KwabzStore.adminLogin(email, password);
+        if (success) {
+          window.location.href = 'admin-dashboard.html';
+        } else {
+          throw new Error('Access denied');
+        }
+      } catch (err) {
+        console.error('Admin login error:', err);
+        errorBox.textContent = 'Invalid credentials or access denied. Ensure you are an authorized administrator.';
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In <span class="material-symbols-outlined" style="font-size:1.125rem;">arrow_forward</span>';
+      }
+    }
+  </script>
+</body>
+
+</html>

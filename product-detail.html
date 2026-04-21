@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Product Detail — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="shop.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline">Kwabz Store</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <a href="cart.html" class="icon-btn">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span class="cart-badge" data-cart-badge style="display:none;">0</span>
+      </a>
+      <a href="login.html" class="icon-btn" id="authNavLinkHeader">
+        <span class="material-symbols-outlined">person</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ═══ Main Content ═══ -->
+  <main style="padding-top:4rem;padding-bottom:8rem;max-width:80rem;margin:0 auto;">
+
+    <!-- Hero Image -->
+    <div id="heroSection" style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;">
+      <img id="heroImage" src="" alt="" style="width:100%;height:100%;object-fit:cover;" />
+      <!-- Breadcrumb overlay -->
+      <div style="position:absolute;top:2rem;left:2rem;display:none;" id="breadcrumb" class="hidden-mobile">
+        <nav style="background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);padding:0.5rem 1rem;border-radius:2rem;border:1px solid rgba(255,255,255,0.2);">
+          <ol style="display:flex;gap:0.5rem;list-style:none;font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:white;">
+            <li>Collection</li>
+            <li>/</li>
+            <li id="breadcrumbCat" style="font-weight:800;"></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div style="padding:2rem 1.5rem 0;display:grid;grid-template-columns:1fr;gap:3rem;">
+
+      <!-- Left / Main Column -->
+      <div id="productInfo">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <span class="chip chip--primary">New Arrival</span>
+          <span id="stockBadge" style="font-weight:700;font-size:0.75rem;letter-spacing:-0.02em;text-transform:uppercase;"></span>
+        </div>
+
+        <h1 id="productName" class="font-headline" style="font-size:2.5rem;font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:0.75rem;"></h1>
+
+        <div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:0.5rem;">
+          <span id="productPrice" class="font-headline" style="font-size:1.5rem;font-weight:700;"></span>
+          <span id="productOriginalPrice" style="color:var(--outline);font-size:1.125rem;text-decoration:line-through;"></span>
+          <span id="discountBadge" class="chip chip--surface" style="display:none;"></span>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <p id="productDescription" class="text-body-lg" style="color:var(--on-surface-variant);line-height:1.7;"></p>
+        </div>
+
+        <!-- Seller Attribution & Contact -->
+        <div id="sellerBox" style="margin-top:2rem; padding:1.5rem; background:var(--surface-container-low); border-radius:var(--radius-xl); display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <p class="text-label-sm" style="color:var(--outline); margin-bottom:0.25rem;">CURATED BY</p>
+              <a id="sellerStoreLink" href="#" style="text-decoration:none;">
+                <h4 id="sellerName" class="font-headline" style="font-weight:800; color:var(--on-surface);"></h4>
+              </a>
+            </div>
+            <button id="sellerContactBtn" class="btn-icon" style="background:var(--secondary-container); color:var(--on-secondary-container);">
+              <span class="material-symbols-outlined">chat</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Material Detail Cards -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:3rem;" id="detailCards">
+          <div style="background:var(--surface-container-low);padding:1.5rem;border-radius:var(--radius-xl);">
+            <span class="material-symbols-outlined" style="color:var(--primary);margin-bottom:0.5rem;">verified</span>
+            <h3 class="font-headline" style="font-weight:700;font-size:0.875rem;text-transform:uppercase;">Quality</h3>
+            <p style="font-size:0.75rem;color:var(--on-surface-variant);margin-top:0.25rem;">Premium materials, built to last.</p>
+          </div>
+          <div style="background:var(--surface-container-low);padding:1.5rem;border-radius:var(--radius-xl);">
+            <span class="material-symbols-outlined" style="color:var(--primary);margin-bottom:0.5rem;">local_shipping</span>
+            <h3 class="font-headline" style="font-weight:700;font-size:0.875rem;text-transform:uppercase;">Shipping</h3>
+            <p style="font-size:0.75rem;color:var(--on-surface-variant);margin-top:0.25rem;">Express delivery in 2-3 days.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Footer within main to scroll with content -->
+    <footer style="padding:4rem 1.5rem; text-align:center; border-top:1px solid var(--outline-variant); margin-top:4rem;">
+      <h3 class="font-headline" style="margin-bottom:1rem; font-size:1.125rem;">Kwabz Store Online</h3>
+      <p class="text-label-sm" style="color:var(--outline); letter-spacing:0.1em; margin-bottom:2rem;">SMART COMMERCE • ACCRA, GHANA</p>
+      <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:1.5rem;">
+        <span class="material-symbols-outlined" style="color:var(--outline);">public</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">share</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">mail</span>
+      </div>
+      <p style="font-size:0.625rem; color:var(--outline); opacity:0.6; letter-spacing:0.05em;">
+        Developed by Mr Rager & 3 Strong Inc
+      </p>
+    </footer>
+  </main>
+
+  <!-- ═══ Fixed Bottom Action Bar ═══ -->
+  <footer style="position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);">
+    <div style="max-width:80rem;margin:0 auto;padding:1rem 1.5rem;height:6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div style="display:flex;flex-direction:column;">
+        <span class="text-label-sm" style="color:var(--outline);">Total Price</span>
+        <span id="footerPrice" class="font-headline" style="font-size:1.25rem;font-weight:900;"></span>
+      </div>
+      <div style="display:flex;flex:1;gap:0.75rem;height:3.5rem;max-width:24rem;">
+        <button id="favBtn" class="btn-icon" style="flex-shrink:0;" onclick="KwabzUtils.toast('Added to favorites!')">
+          <span class="material-symbols-outlined" style="color:var(--primary);">favorite</span>
+        </button>
+        <button id="addToCartBtn" class="btn-primary" style="flex:1;padding:0;height:100%;font-size:0.8125rem;letter-spacing:0.1em;text-transform:uppercase;" onclick="addProductToCart()">
+          Add to Cart
+          <span class="material-symbols-outlined" style="font-size:1rem;">shopping_bag</span>
+        </button>
+        <button id="waOrderBtn" class="btn-whatsapp" style="display:none; flex:1; padding:0; height:100%; font-size:0.8125rem; letter-spacing:0.1em; text-transform:uppercase; background:#25D366; color:white;">
+          Order on WhatsApp
+          <span class="material-symbols-outlined" style="font-size:1rem;">send</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ Loading State ═══ -->
+  <div id="loadingState" class="loading-spinner" style="position:fixed;inset:0;background:var(--surface);z-index:200;">
+  </div>
+
+  <!-- ═══ Error State ═══ -->
+  <div id="errorState" style="display:none;" class="empty-state" style="margin-top:6rem;">
+    <span class="material-symbols-outlined empty-state__icon">error_outline</span>
+    <p class="empty-state__title">Product not found</p>
+    <p class="empty-state__text">This product may have been removed or doesn't exist.</p>
+    <a href="shop.html" class="btn-secondary" style="margin-top:1.5rem;">Back to Store</a>
+  </div>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    KwabzStore.init();
+    KwabzUtils.initAuthNavigation();
+
+    // ─── Smart Branding Context ───
+    if (!document.referrer.includes('seller-store.html')) {
+       // Optional: Clear context if navigating from global shop
+       // KwabzUtils.clearSmartBranding(); 
+    }
+    KwabzUtils.applySmartBranding();
+    // Seed data is now handled by Firestore initialization
+    
+    const productId = KwabzUtils.getParam('id');
+    let currentProduct = null;
+
+    function loadProduct() {
+      if (!productId) {
+        showError();
+        return;
+      }
+
+      currentProduct = KwabzStore.getProductById(productId);
+
+      if (!currentProduct) {
+        // Data might still be loading from Firestore
+        return;
+      }
+
+      renderProduct(currentProduct);
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'none';
+      document.querySelector('main').style.display = 'block';
+      document.querySelector('footer').style.display = 'block';
+    }
+
+    function renderProduct(p) {
+      document.title = `${p.name} — Kwabz Store`;
+
+      // Hero
+      document.getElementById('heroImage').src = p.image_url;
+      document.getElementById('heroImage').alt = p.name;
+
+      // Breadcrumb
+      const cat = KwabzStore.getCategoryById(p.category_id);
+      if (cat) {
+        document.getElementById('breadcrumbCat').textContent = cat.name;
+        document.getElementById('breadcrumb').style.display = 'block';
+      }
+
+      // Stock badge
+      const stockBadge = document.getElementById('stockBadge');
+      if (p.stock <= 5 && p.stock > 0) {
+        stockBadge.textContent = `Only ${p.stock} left`;
+        stockBadge.style.color = 'var(--error)';
+      } else if (p.stock <= 0 || !p.in_stock) {
+        stockBadge.textContent = 'Out of Stock';
+        stockBadge.style.color = 'var(--error)';
+        document.getElementById('addToCartBtn').disabled = true;
+        document.getElementById('addToCartBtn').textContent = 'Out of Stock';
+      } else if (p.availability === 'pre_order') {
+        stockBadge.textContent = 'Available for Pre-order';
+        stockBadge.style.color = '#2563eb';
+        document.getElementById('addToCartBtn').innerHTML = `Pre-order Now <span class="material-symbols-outlined" style="font-size:1rem;">shopping_bag</span>`;
+      } else {
+        stockBadge.textContent = 'In Stock';
+        stockBadge.style.color = '#166534';
+      }
+
+      // Name
+      document.getElementById('productName').textContent = p.name;
+
+      // Price
+      const discountedPrice = KwabzUtils.calcDiscountedPrice(p.price, p.discount);
+      document.getElementById('productPrice').textContent = KwabzUtils.formatPrice(discountedPrice);
+      document.getElementById('footerPrice').textContent = KwabzUtils.formatPrice(discountedPrice);
+
+      if (p.discount > 0) {
+        document.getElementById('productOriginalPrice').textContent = KwabzUtils.formatPrice(p.price);
+        const badge = document.getElementById('discountBadge');
+        badge.style.display = 'inline-flex';
+        badge.textContent = `-${p.discount}%`;
+      } else {
+        document.getElementById('productOriginalPrice').style.display = 'none';
+      }
+
+      // Description
+      document.getElementById('productDescription').textContent = p.description || 'A premium product from the Kwabz Store collection. Crafted with intentionality and designed for the modern lifestyle.';
+      
+      // Seller Attribution
+      const sellerBox = document.getElementById('sellerBox');
+      const cartBtn = document.getElementById('addToCartBtn');
+      const waBtn = document.getElementById('waOrderBtn');
+      const footerPrice = document.getElementById('footerPrice').parentElement;
+
+      if (p.seller_id && p.seller_id !== 'main') {
+        const seller = KwabzStore.getSellerById(p.seller_id);
+        if (seller) {
+          sellerBox.style.display = 'block';
+          document.getElementById('sellerName').textContent = seller.name;
+          document.getElementById('sellerStoreLink').href = `seller-store.html?id=${seller.id}`;
+          
+          // Force WhatsApp Ordering
+          cartBtn.style.display = 'none';
+          waBtn.style.display = 'flex';
+          footerPrice.style.display = 'none';
+          
+          if (seller.whatsapp) {
+            waBtn.onclick = () => {
+              const msg = encodeURIComponent(`Hello! I want to order "${p.name}" (GH₵${p.price}) in your store on Kwabz Store.`);
+              const cleanPhone = seller.whatsapp.replace(/\D/g, '');
+              window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
+            };
+            document.getElementById('sellerContactBtn').onclick = () => {
+              const msg = encodeURIComponent(`Hi! I'm interested in "${p.name}" (GH₵${p.price}) in your store on Kwabz Store.`);
+              const cleanPhone = seller.whatsapp.replace(/\D/g, '');
+              window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
+            };
+            document.getElementById('sellerContactBtn').style.display = 'flex';
+          } else {
+            document.getElementById('sellerContactBtn').style.display = 'none';
+          }
+        } else {
+          sellerBox.style.display = 'none';
+          cartBtn.style.display = 'flex';
+          waBtn.style.display = 'none';
+          footerPrice.style.display = 'flex';
+        }
+      } else {
+        sellerBox.style.display = 'none';
+        cartBtn.style.display = 'flex';
+        waBtn.style.display = 'none';
+        footerPrice.style.display = 'flex';
+      }
+    }
+
+    function showError() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'flex';
+      document.querySelector('main').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+    }
+
+    function addProductToCart() {
+      if (!currentProduct) return;
+      KwabzStore.addToCart(currentProduct);
+      KwabzUtils.toast(`${currentProduct.name} added to cart`);
+      KwabzUtils.updateCartBadge();
+    }
+
+    KwabzStore.on('products_changed', () => loadProduct());
+    KwabzStore.on('categories_changed', () => {
+      if (currentProduct) renderProduct(currentProduct);
+    });
+    KwabzStore.on('cart_changed', () => KwabzUtils.updateCartBadge());
+    
+    // Check for error after a short delay if product still not found
+    setTimeout(() => {
+      if (!currentProduct) showError();
+    }, 3000);
+
+    loadProduct();
+    KwabzUtils.updateCartBadge();
+  </script>
+</body>
+</html>

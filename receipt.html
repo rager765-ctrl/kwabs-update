@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Order Receipt — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --receipt-bg: #ffffff;
+      --receipt-text: #1a1c1c;
+    }
+
+    body {
+      background-color: var(--surface-container-low);
+    }
+
+    .receipt-container {
+      max-width: 48rem;
+      margin: 2rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .receipt-card {
+      background: var(--receipt-bg);
+      border-radius: 2rem;
+      padding: 3rem;
+      box-shadow: var(--shadow-ambient);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .receipt-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--primary);
+    }
+
+    .receipt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: 2rem;
+    }
+
+    .receipt-logo {
+      font-family: var(--font-headline);
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+    }
+
+    .receipt-id {
+      text-align: right;
+    }
+
+    .receipt-id h1 {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--outline);
+      margin-bottom: 0.25rem;
+    }
+
+    .receipt-id p {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-section h2 {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--outline);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .info-section p {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 3rem;
+    }
+
+    .items-table th {
+      text-align: left;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--outline);
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .items-table td {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--surface-container);
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+
+    .items-table .price-col {
+      text-align: right;
+    }
+
+    .total-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 2rem;
+      width: 100%;
+      max-width: 15rem;
+    }
+
+    .total-row span:first-child {
+      color: var(--outline);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .total-row span:last-child {
+      font-weight: 700;
+      font-size: 0.9375rem;
+    }
+
+    .total-row.grand-total {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 2px solid var(--on-surface);
+    }
+
+    .total-row.grand-total span:last-child {
+      font-size: 1.5rem;
+      font-weight: 900;
+      font-family: var(--font-headline);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .btn-print {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 1rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .btn-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline {
+      padding: 1rem 2rem;
+      border: 1px solid var(--outline-variant);
+      border-radius: 1rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: var(--surface-container);
+    }
+
+    /* ─── Print Styles ─── */
+    @media print {
+      body {
+        background: white;
+      }
+      .receipt-container {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+      }
+      .receipt-card {
+        box-shadow: none;
+        padding: 0;
+        border-radius: 0;
+      }
+      .receipt-card::before,
+      .actions,
+      .top-app-bar {
+        display: none !important;
+      }
+      .items-table td {
+        padding: 0.75rem 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .receipt-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="shop.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline">Order Confirmation</span>
+    </div>
+  </header>
+
+  <main class="receipt-container" style="padding-top: 6rem;">
+    <div id="loading" style="text-align:center; padding: 4rem;">
+      <p style="color:var(--outline); font-weight: 600;">Loading your receipt...</p>
+    </div>
+
+    <div id="receiptContent" class="receipt-card" style="display:none;">
+      <div class="receipt-header">
+        <div class="receipt-logo">KWABZ STORE</div>
+        <div class="receipt-id">
+          <h1>Order Number</h1>
+          <p id="orderNumber">#0000</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-section">
+          <h2>Billed To</h2>
+          <p id="customerName" style="font-weight: 700;"></p>
+          <p id="customerPhone"></p>
+          <p id="customerAddress" style="white-space: pre-wrap;"></p>
+        </div>
+        <div class="info-section" style="text-align: right;">
+          <h2>Order Date</h2>
+          <p id="orderDate"></p>
+          <h2 style="margin-top: 1.5rem;">Status</h2>
+          <p id="orderStatus" style="text-transform: capitalize;"></p>
+        </div>
+      </div>
+
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Product Description</th>
+            <th style="text-align: center;">Qty</th>
+            <th class="price-col">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="itemsList">
+          <!-- Items will be injected here -->
+        </tbody>
+      </table>
+
+      <div class="total-section">
+        <div class="total-row">
+          <span>Subtotal</span>
+          <span id="subtotal">GHS 0.00</span>
+        </div>
+        <div class="total-row">
+          <span>Delivery Fee</span>
+          <span>GHS 0.00</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total</span>
+          <span id="grandTotal">GHS 0.00</span>
+        </div>
+      </div>
+
+      <p style="margin-top: 4rem; text-align: center; font-size: 0.75rem; color: var(--outline); font-weight: 600; letter-spacing: 0.05em;">
+        Thank you for shopping with Kwabz Store. <br>
+        This is a computer-generated receipt and does not require a signature.
+      </p>
+    </div>
+
+    <div class="actions">
+      <button onclick="window.print()" class="btn-print">
+        <span class="material-symbols-outlined">download</span>
+        Download PDF
+      </button>
+      <a href="shop.html" class="btn-outline">Return to Shop</a>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    async function loadReceipt() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id');
+
+      if (!orderId) {
+        document.getElementById('loading').innerHTML = `
+          <div style="color:var(--error); padding: 2rem; background: var(--error-container); border-radius: 1rem;">
+             <p style="font-weight:800;">ERROR: Invalid Receipt</p>
+             <p style="font-size:0.875rem; margin-top:0.5rem;">No order ID provided. Please return to your account or contact support.</p>
+          </div>
+        `;
+        return;
+      }
+
+      await KwabzStore.init();
+      const order = await KwabzStore.getOrderById(orderId);
+
+      if (!order) {
+        document.getElementById('loading').innerHTML = `
+          <div style="color:var(--error); padding: 2rem; background: var(--error-container); border-radius: 1rem;">
+             <p style="font-weight:800;">ERROR: Order Not Found</p>
+             <p style="font-size:0.875rem; margin-top:0.5rem;">We couldn't find an order with ID: ${orderId}</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Populate Data
+      document.getElementById('orderNumber').textContent = order.order_number;
+      document.getElementById('orderDate').textContent = new Date(order.created_at).toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+      document.getElementById('orderStatus').textContent = order.status;
+      document.getElementById('customerName').textContent = order.customer.name;
+      document.getElementById('customerPhone').textContent = order.customer.phone;
+      document.getElementById('customerAddress').textContent = order.customer.address;
+
+      // Items
+      const itemsList = document.getElementById('itemsList');
+      itemsList.innerHTML = order.items.map(item => `
+        <tr>
+          <td>${item.name}</td>
+          <td style="text-align: center;">${item.quantity}</td>
+          <td class="price-col">${KwabzUtils.formatPrice(item.price * item.quantity)}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('subtotal').textContent = KwabzUtils.formatPrice(order.total_price);
+      document.getElementById('grandTotal').textContent = KwabzUtils.formatPrice(order.total_price);
+
+      // Show Content
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('receiptContent').style.display = 'block';
+    }
+
+    loadReceipt();
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ─── Helper Functions ───────────────────────────────────
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'admin@kwabzstore.com';
+    }
+    
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // ─── Store Content (Public Read, Admin Write) ───────────
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /sellers/{sellerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── Orders (Guest Create, Owner/Admin Read) ────────────
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && (resource.data.customer_uid == request.auth.uid || request.auth.uid == request.resource.data.customer_uid));
+      allow update, delete: if isAdmin();
+    }
+
+    // ─── User Profiles & Carts (Owner Only) ─────────────────
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      
+      match /{allPaths=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

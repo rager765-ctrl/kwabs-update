@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Account — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .header h1 {
+      font-family: var(--font-headline);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface-container);
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--surface-container-high);
+    }
+
+    .auth-required {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .auth-required h2 {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: var(--on-surface-variant);
+    }
+
+    .auth-required p {
+      color: var(--on-surface-variant);
+      margin-bottom: 2rem;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+    }
+
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-container);
+    }
+
+    .btn-secondary {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-container-high);
+    }
+
+    .profile-card {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-2xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--surface-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 2.5rem;
+    }
+
+    .profile-info h2 {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--on-surface);
+    }
+
+    .profile-info p {
+      color: var(--on-surface-variant);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--on-surface-variant);
+      font-size: 0.85rem;
+    }
+
+    .info-value {
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+
+    .section {
+      margin-top: 2rem;
+    }
+
+    .section h3 {
+      font-family: var(--font-headline);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--on-surface);
+    }
+
+    .menu-item {
+      padding: 1rem;
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--surface-container-lowest);
+    }
+
+    .menu-item:hover {
+      background: var(--surface-container-low);
+      border-color: var(--outline);
+    }
+
+    .menu-item-text {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .menu-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--on-surface);
+    }
+
+    .menu-item-content h4 {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .menu-item-content p {
+      color: var(--on-surface-variant);
+      font-size: 0.8rem;
+    }
+
+    .menu-item-arrow {
+      color: var(--outline-variant);
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--error-container);
+      color: var(--error);
+      border: 1px solid var(--error);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 2rem;
+    }
+
+    .logout-btn:hover {
+      background: var(--error);
+      color: white;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--on-surface-variant);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--outline-variant);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header" style="border:none; margin-bottom: 3rem;">
+      <div>
+        <h1 style="font-size: 2.5rem; letter-spacing: -0.04em;">My Account</h1>
+        <p class="text-body-sm" style="color: var(--on-surface-variant); margin-top: 0.25rem;">Manage your profile and orders</p>
+      </div>
+      <a href="index.html" class="back-btn" style="background: var(--surface-container-high);">
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Loading your profile...</p>
+    </div>
+
+    <!-- Auth Required State -->
+    <div id="authRequired" class="auth-required" style="display: none;">
+      <h2>Sign in to continue</h2>
+      <p>You need to be logged in to view your account</p>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn btn-primary">Sign In</a>
+        <a href="signup.html" class="btn btn-secondary">Create Account</a>
+      </div>
+    </div>
+
+    <!-- Profile State -->
+    <div id="profileState" style="display: none;">
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-avatar" id="userAvatar">👤</div>
+        <div class="profile-info">
+          <h2 id="userEmail"></h2>
+          <p id="userCreated"></p>
+          <div class="info-row">
+            <span class="info-label">Account Status</span>
+            <span class="info-value" style="color: #4ecdc4;">Active</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Member Since</span>
+            <span class="info-value" id="memberSince"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Cart Items</span>
+            <span class="info-value" id="cartCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="section">
+        <h3>Settings</h3>
+        <div class="menu-item" onclick="viewOrders()">
+          <div class="menu-item-text">
+            <div class="menu-item-icon">
+              <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <div class="menu-item-content">
+              <h4>My Orders</h4>
+              <p>View your order history</p>
+            </div>
+          </div>
+          <div class="menu-item-arrow">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </div>
+        </div>
+
+        <div class="menu-item" onclick="viewCart()">
+          <div class="menu-item-text">
+            <div class="menu-item-icon">
+              <span class="material-symbols-outlined">shopping_cart</span>
+            </div>
+            <div class="menu-item-content">
+              <h4>Shopping Cart</h4>
+              <p>Review your cart</p>
+            </div>
+          </div>
+          <div class="menu-item-arrow">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </div>
+        </div>
+
+        <div class="menu-item" onclick="viewWishlist()">
+          <div class="menu-item-text">
+            <div class="menu-item-icon">
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <div class="menu-item-content">
+              <h4>Wishlist</h4>
+              <p>Your saved items</p>
+            </div>
+          </div>
+          <div class="menu-item-arrow">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </div>
+        </div>
+
+        <div class="menu-item" onclick="editProfile()">
+          <div class="menu-item-text">
+            <div class="menu-item-icon">
+              <span class="material-symbols-outlined">edit</span>
+            </div>
+            <div class="menu-item-content">
+              <h4>Edit Profile</h4>
+              <p>Update your information</p>
+            </div>
+          </div>
+          <div class="menu-item-arrow">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </div>
+        </div>
+
+        <div class="menu-item" onclick="changePassword()">
+          <div class="menu-item-text">
+            <div class="menu-item-icon">
+              <span class="material-symbols-outlined">lock</span>
+            </div>
+            <div class="menu-item-content">
+              <h4>Change Password</h4>
+              <p>Update your password</p>
+            </div>
+          </div>
+          <div class="menu-item-arrow">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logout Button -->
+      <button class="logout-btn" onclick="handleLogout()">
+        <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 0.5rem;">logout</span>
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    KwabzStore.init();
+
+    // ─── UI States ───
+    const loadingState = document.getElementById('loadingState');
+    const authRequired = document.getElementById('authRequired');
+    const profileState = document.getElementById('profileState');
+
+    function showLoading() {
+      loadingState.style.display = 'block';
+      authRequired.style.display = 'none';
+      profileState.style.display = 'none';
+    }
+
+    function showAuthRequired() {
+      loadingState.style.display = 'none';
+      authRequired.style.display = 'block';
+      profileState.style.display = 'none';
+    }
+
+    function showProfile() {
+      loadingState.style.display = 'none';
+      authRequired.style.display = 'none';
+      profileState.style.display = 'block';
+    }
+
+    // ─── Initialization ───
+    window.addEventListener('load', () => {
+      showLoading();
+      
+      // 1. Initial Check
+      const currentUser = KwabzStore.getCurrentUser();
+      if (currentUser) {
+        loadProfile(currentUser);
+      } else if (KwabzStore.getSyncStatus() !== 'syncing') {
+        // Not syncing and no user? Must be logged out
+        showAuthRequired();
+      }
+
+      // 2. Auth Navigation
+      KwabzUtils.initAuthNavigation();
+
+      // 3. Robust Listeners
+      KwabzStore.on('user_changed', user => {
+        console.log('[Account] User state changed:', user);
+        if (user) {
+          loadProfile(user);
+        } else {
+          showAuthRequired();
+        }
+      });
+
+      // Update cart count when it changes
+      KwabzStore.on('cart_changed', cart => {
+        document.getElementById('cartCount').textContent = cart.length;
+      });
+    });
+
+    function loadProfile(user) {
+      const email = user.email || 'User';
+      const initials = email.substring(0, 2).toUpperCase();
+
+      document.getElementById('userEmail').textContent = email;
+      document.getElementById('userAvatar').textContent = initials;
+      document.getElementById('userCreated').textContent = 'Welcome to Kwabz Store!';
+      
+      const memberSince = new Date(user.metadata.creationTime).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      document.getElementById('memberSince').textContent = memberSince;
+
+      const cartCount = KwabzStore.getCart().length;
+      document.getElementById('cartCount').textContent = cartCount;
+
+      showProfile();
+    }
+
+    // ─── Menu Actions ───
+    function viewOrders() {
+      KwabzUtils.toast('My Orders page coming soon!', 'success');
+    }
+
+    function viewCart() {
+      window.location.href = 'cart.html';
+    }
+
+    function viewWishlist() {
+      KwabzUtils.toast('Wishlist feature coming soon!', 'success');
+    }
+
+    function editProfile() {
+      KwabzUtils.toast('Edit profile coming soon!', 'success');
+    }
+
+    function changePassword() {
+      KwabzUtils.toast('Change password feature coming soon!', 'success');
+    }
+
+    // ─── Logout ───
+    async function handleLogout() {
+      try {
+        await KwabzStore.logout();
+        KwabzUtils.toast('Logged out successfully', 'success');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } catch (err) {
+        KwabzUtils.toast('Logout failed: ' + err.message, 'error');
+      }
+    }
+  </script>
+</body>
+
+</html>

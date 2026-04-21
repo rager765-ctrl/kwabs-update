@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Sellers — Kwabz Store Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="admin-dashboard.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline">Manage Sellers</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <button class="icon-btn" onclick="openSellerModal()" title="Add Seller" style="background:var(--primary);color:var(--on-primary);border-radius:var(--radius-lg);">
+        <span class="material-symbols-outlined" style="font-size:1.25rem;">add</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="page-content page-content--admin">
+    <section style="margin-bottom:2rem;">
+      <h2 class="section-header">Mini-Store Directory</h2>
+      <p class="text-body-sm" style="color:var(--outline); margin-top:-1rem; margin-bottom:2rem;">Manage independent sellers and their brand presence.</p>
+      
+      <div id="sellerCount" class="text-label-md" style="color:var(--outline); margin-bottom:1rem;">0 SELLERS</div>
+      <div class="data-list" id="sellerList">
+        <!-- JS Populated -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <span class="material-symbols-outlined empty-state__icon">storefront</span>
+        <p class="empty-state__title">No Sellers Defined</p>
+        <p class="empty-state__text">Start by adding independent curators to your store network.</p>
+        <button onclick="openSellerModal()" class="btn-primary" style="width:auto;padding:1rem 2rem;margin-top:1.5rem;">Add First Seller</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ Seller Modal (Add/Edit) ═══ -->
+  <div class="modal-overlay" id="sellerModal" onclick="if(event.target===this) closeSellerModal()">
+    <div class="modal-content" style="max-width:32rem; padding:2.5rem; border-radius:1.5rem;">
+      <div class="modal-handle"></div>
+      <h2 class="font-headline text-headline-sm" id="modalTitle" style="margin-bottom:1.5rem;">New Mini-Store</h2>
+      
+      <form id="sellerForm" onsubmit="handleSellerSubmit(event)" style="display:flex; flex-direction:column; gap:1.5rem;">
+        <input type="hidden" id="editSellerId" />
+        
+        <div class="form-group">
+          <label class="form-group__label">Store Name</label>
+          <input type="text" id="storeName" class="minimal-input" placeholder="e.g., Thrift by Zen" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-group__label">Store Logo/Cover URL</label>
+          <input type="text" id="storeLogo" class="minimal-input" placeholder="https://..." required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-group__label">WhatsApp Number (Direct Contact)</label>
+          <input type="tel" id="storeWhatsapp" class="minimal-input" placeholder="e.g. 233240000000" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-group__label">What they sell (Short Bio)</label>
+          <textarea id="storeDescription" class="minimal-input" rows="3" placeholder="Curated vintage finds for students..." style="resize:none;" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-group__label">Focused Categories</label>
+          <div id="catCheckboxes" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:0.5rem; margin-top:0.5rem;">
+            <!-- JS Populated Categories -->
+          </div>
+        </div>
+
+        <div style="display:flex; gap:1rem; margin-top:1rem;">
+          <button type="button" class="btn-secondary" style="flex:1;" onclick="closeSellerModal()">Cancel</button>
+          <button type="submit" class="btn-primary" style="flex:1;">Save Seller</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ Delete Confirmation Modal ═══ -->
+  <div class="modal-overlay" id="deleteModal" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-content" style="max-width:24rem; border-radius:var(--radius-xl); padding:2rem;">
+      <h3 class="font-headline text-headline-sm" style="margin-bottom:0.5rem;">Remove Seller?</h3>
+      <p class="text-body-sm" style="color:var(--outline); margin-bottom:2rem;">This will disconnect any products currently assigned to this seller.</p>
+      <div style="display:flex; gap:0.75rem;">
+        <button class="btn-secondary" style="flex:1;" onclick="document.getElementById('deleteModal').classList.remove('open')">Cancel</button>
+        <button class="btn-danger" style="flex:1;" id="confirmDeleteBtn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav-admin">
+    <a href="admin-dashboard.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Stats</span>
+    </a>
+    <a href="admin-products.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Products</span>
+    </a>
+    <a href="admin-sellers.html" class="bottom-nav-admin__item active">
+      <span class="material-symbols-outlined filled">storefront</span>
+      <span>Sellers</span>
+    </a>
+    <a href="admin-orders.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Orders</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    KwabzStore.init();
+    if (!KwabzUtils.requireAdmin()) { }
+
+    let deleteTargetId = null;
+
+    function renderSellers() {
+      const sellers = KwabzStore.getSellers();
+      const container = document.getElementById('sellerList');
+      const empty = document.getElementById('emptyState');
+      const count = document.getElementById('sellerCount');
+
+      count.textContent = `${sellers.length} SELLERS`;
+
+      if (sellers.length === 0) {
+        container.innerHTML = '';
+        empty.style.display = 'flex';
+        return;
+      }
+
+      empty.style.display = 'none';
+      container.innerHTML = sellers.map(s => `
+        <div class="data-list__item" style="padding:1.5rem;">
+          <img class="data-list__image" src="${s.image_url}" alt="${s.name}" style="border-radius:1rem; width:4rem; height:4rem;" />
+          <div class="data-list__info" style="margin-left:1.5rem;">
+            <p class="font-headline" style="font-weight:700;font-size:1rem;">${s.name}</p>
+            <p class="text-body-sm" style="color:var(--outline); margin-top:0.25rem;">${s.description}</p>
+            <p style="font-size:0.625rem; color:var(--primary); font-weight:700; margin-top:0.5rem; letter-spacing:0.05em;">
+              ${(s.categories || []).map(cid => KwabzStore.getCategoryById(cid)?.name).filter(Boolean).join(' • ') || 'ALL CATEGORIES'}
+            </p>
+          </div>
+          <div class="data-list__actions">
+            <a href="admin-add-product.html?seller_id=${s.id}" class="btn-icon" title="Add Product to Store">
+              <span class="material-symbols-outlined" style="color:var(--primary);">add_box</span>
+            </a>
+            <button class="btn-icon" onclick='openSellerModal(${JSON.stringify(s).replace(/'/g, "&apos;")})'>
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+            <button class="btn-icon" onclick="confirmDeleteSeller('${s.id}')">
+              <span class="material-symbols-outlined" style="color:var(--error);">delete</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCategorySelections() {
+      const cats = KwabzStore.getCategories();
+      const container = document.getElementById('catCheckboxes');
+      container.innerHTML = cats.map(c => `
+        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.75rem; cursor:pointer;">
+          <input type="checkbox" name="categories" value="${c.id}" />
+          ${c.name}
+        </label>
+      `).join('');
+    }
+
+    function openSellerModal(seller = null) {
+      const modal = document.getElementById('sellerModal');
+      const form = document.getElementById('sellerForm');
+      form.reset();
+      
+      if (seller) {
+        document.getElementById('modalTitle').textContent = 'Edit Mini-Store';
+        document.getElementById('editSellerId').value = seller.id;
+        document.getElementById('storeName').value = seller.name;
+        document.getElementById('storeLogo').value = seller.image_url;
+        document.getElementById('storeDescription').value = seller.description;
+        document.getElementById('storeWhatsapp').value = seller.whatsapp || '';
+        
+        const checks = form.querySelectorAll('input[type="checkbox"]');
+        checks.forEach(ch => {
+          if (seller.categories && seller.categories.includes(ch.value)) ch.checked = true;
+        });
+      } else {
+        document.getElementById('modalTitle').textContent = 'New Mini-Store';
+        document.getElementById('editSellerId').value = '';
+      }
+      
+      modal.classList.add('open');
+    }
+
+    function closeSellerModal() {
+      document.getElementById('sellerModal').classList.remove('open');
+    }
+
+    async function handleSellerSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('editSellerId').value;
+      const data = {
+        name: document.getElementById('storeName').value.trim(),
+        image_url: document.getElementById('storeLogo').value.trim(),
+        description: document.getElementById('storeDescription').value.trim(),
+        whatsapp: document.getElementById('storeWhatsapp').value.trim(),
+        categories: Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(cb => cb.value)
+      };
+
+      try {
+        if (id) {
+          await KwabzStore.updateSeller(id, data);
+          KwabzUtils.toast('Seller updated');
+        } else {
+          await KwabzStore.addSeller(data);
+          KwabzUtils.toast('Seller added');
+        }
+        closeSellerModal();
+      } catch (err) {
+        KwabzUtils.toast('Save failed', 'error');
+      }
+    }
+
+    function confirmDeleteSeller(id) {
+      deleteTargetId = id;
+      document.getElementById('deleteModal').classList.add('open');
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+      if (deleteTargetId) {
+        await KwabzStore.deleteSeller(deleteTargetId);
+        KwabzUtils.toast('Seller removed');
+        deleteTargetId = null;
+        document.getElementById('deleteModal').classList.remove('open');
+      }
+    });
+
+    KwabzStore.on('sellers_changed', () => renderSellers());
+    KwabzStore.on('categories_changed', () => renderCategorySelections());
+
+    renderCategorySelections();
+    renderSellers();
+  </script>
+</body>
+</html>

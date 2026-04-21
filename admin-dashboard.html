@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="icon-btn" onclick="document.getElementById('adminDrawer').classList.add('open')">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <span class="top-app-bar__title font-headline">Admin Dashboard</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <div id="syncStatus" style="font-size:0.625rem;font-weight:800;letter-spacing:0.05em;padding:0.25rem 0.6rem;border-radius:1rem;margin-right:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.25rem;">
+        <!-- Status injected by JS -->
+      </div>
+      <button class="icon-btn" onclick="KwabzStore.refreshAll();" title="Refresh Sync">
+        <span class="material-symbols-outlined">sync</span>
+      </button>
+      <button class="icon-btn" onclick="KwabzStore.adminLogout().then(() => window.location.href='admin-login.html');"
+        title="Logout">
+        <span class="material-symbols-outlined">logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ Side Drawer ═══ -->
+  <div class="modal-overlay" id="adminDrawer" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-content"
+      style="position:fixed;left:0;top:0;height:100%;width:20rem;max-width:80vw;border-radius:0 var(--radius-xl) var(--radius-xl) 0;transform:translateX(-100%);display:flex;flex-direction:column;padding:2rem;">
+      <div style="margin-bottom:3rem;">
+        <h2 class="font-headline"
+          style="font-weight:900;font-size:1.125rem;letter-spacing:-0.04em;text-transform:uppercase;">Kwabz Store</h2>
+        <p class="text-label-sm" style="color:var(--outline);">Student-Life Commerce</p>
+      </div>
+      <nav style="flex:1;display:flex;flex-direction:column;gap:0.25rem;">
+        <a href="admin-dashboard.html"
+          style="display:flex;align-items:center;gap:1rem;padding:0.875rem 1rem;border-radius:var(--radius-lg);background:var(--primary);color:var(--on-primary);font-family:var(--font-headline);font-size:0.875rem;font-weight:700;">
+          <span class="material-symbols-outlined">admin_panel_settings</span>
+          Admin Dashboard
+        </a>
+        <a href="admin-diagnostics.html"
+          style="display:flex;align-items:center;gap:1rem;padding:0.875rem 1rem;border-radius:var(--radius-lg);font-family:var(--font-headline);font-size:0.875rem;font-weight:600;color:var(--secondary);">
+          <span class="material-symbols-outlined">query_stats</span>
+          Business Insights
+        </a>
+        <a href="shop.html"
+          style="display:flex;align-items:center;gap:1rem;padding:0.875rem 1rem;border-radius:var(--radius-lg);font-family:var(--font-headline);font-size:0.875rem;font-weight:600;color:var(--secondary);">
+          <span class="material-symbols-outlined">person_search</span>
+          Switch to Customer
+        </a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.75rem;padding-top:1rem;">
+        <span style="font-weight:700;font-size:0.875rem;">Kwabz Store</span>
+        <span style="font-size:0.625rem;color:var(--outline);">v1.0.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="page-content page-content--admin">
+
+    <!-- Stats Grid -->
+    <section style="margin-bottom:3rem;">
+      <h2 class="section-header">Store Overview</h2>
+      <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem;">
+        <!-- Products -->
+        <div class="stat-card" style="padding:1.5rem; background:var(--surface-container-lowest); border-radius:var(--radius-xl); border-bottom:3px solid var(--primary);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+            <span class="material-symbols-outlined" style="color:var(--outline); font-size:1.25rem;">inventory_2</span>
+          </div>
+          <p id="statProducts" class="stat-card__value" style="font-size:1.75rem;">0</p>
+          <p class="stat-card__label" style="font-size:0.625rem;">PRODUCTS</p>
+        </div>
+        <!-- Categories -->
+        <div class="stat-card" style="padding:1.5rem; background:var(--surface-container-lowest); border-radius:var(--radius-xl);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+            <span class="material-symbols-outlined" style="color:var(--outline); font-size:1.25rem;">category</span>
+          </div>
+          <p id="statCategories" class="stat-card__value" style="font-size:1.75rem;">0</p>
+          <p class="stat-card__label" style="font-size:0.625rem;">CATEGORIES</p>
+        </div>
+        <!-- Orders -->
+        <div class="stat-card" style="padding:1.5rem; background:var(--surface-container-lowest); border-radius:var(--radius-xl);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+            <span class="material-symbols-outlined" style="color:var(--outline); font-size:1.25rem;">receipt_long</span>
+          </div>
+          <p id="statOrders" class="stat-card__value" style="font-size:1.75rem;">0</p>
+          <p class="stat-card__label" style="font-size:0.625rem;">ORDERS</p>
+        </div>
+        <!-- Sellers -->
+        <div class="stat-card" style="padding:1.5rem; background:var(--surface-container-lowest); border-radius:var(--radius-xl);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+            <span class="material-symbols-outlined" style="color:var(--outline); font-size:1.25rem;">storefront</span>
+          </div>
+          <p id="statSellers" class="stat-card__value" style="font-size:1.75rem;">0</p>
+          <p class="stat-card__label" style="font-size:0.625rem;">SELLERS</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section style="margin-bottom:3rem;">
+      <h2 class="section-header">Quick Actions</h2>
+      <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.75rem;">
+        <!-- Add Product -->
+        <a href="admin-add-product.html" class="action-tile" style="display:flex; flex-direction:column; gap:1rem; padding:1.25rem; background:linear-gradient(135deg, var(--on-surface), var(--primary-container)); color:white; border-radius:var(--radius-xl);">
+          <span class="material-symbols-outlined" style="font-size:1.75rem;">add_box</span>
+          <span class="font-headline" style="font-weight:700; font-size:0.875rem; letter-spacing:-0.01em;">NEW PRODUCT</span>
+        </a>
+        <!-- Manage Sellers -->
+        <a href="admin-sellers.html" class="action-tile" style="display:flex; flex-direction:column; gap:1rem; padding:1.25rem; background:white; border:1px solid var(--outline-variant); border-radius:var(--radius-xl);">
+          <span class="material-symbols-outlined" style="color:var(--primary); font-size:1.75rem;">storefront</span>
+          <span class="font-headline" style="font-weight:700; font-size:0.875rem; color:var(--on-surface); letter-spacing:-0.01em;">SELLERS</span>
+        </a>
+        <!-- Manage Categories -->
+        <a href="admin-categories.html" class="action-tile" style="display:flex; flex-direction:column; gap:1rem; padding:1.25rem; background:white; border:1px solid var(--outline-variant); border-radius:var(--radius-xl);">
+          <span class="material-symbols-outlined" style="color:var(--primary); font-size:1.75rem;">category</span>
+          <span class="font-headline" style="font-weight:700; font-size:0.875rem; color:var(--on-surface); letter-spacing:-0.01em;">CATEGORIES</span>
+        </a>
+        <!-- Business Insights -->
+        <a href="admin-diagnostics.html" class="action-tile" style="display:flex; flex-direction:column; gap:1rem; padding:1.25rem; background:white; border:1px solid var(--outline-variant); border-radius:var(--radius-xl);">
+          <span class="material-symbols-outlined" style="color:var(--primary); font-size:1.75rem;">query_stats</span>
+          <span class="font-headline" style="font-weight:700; font-size:0.875rem; color:var(--on-surface); letter-spacing:-0.01em;">INSIGHTS</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Store Settings -->
+    <section style="margin-bottom:3rem;">
+      <h2 class="section-header">Store Configuration</h2>
+      <div class="card card--flat" style="padding:1.5rem;background:var(--surface-container-high);">
+        <div class="form-group">
+          <label class="form-group__label">New Tag Duration (Days)</label>
+          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+            <input type="number" id="newTagDurationInput" class="minimal-input" 
+              style="flex:1;border-radius:var(--radius-lg);background:var(--surface-container-lowest);" placeholder="e.g. 7" />
+            <button onclick="saveStoreSettings()" class="btn-primary" style="width:auto;padding:0 1.5rem;">Save</button>
+          </div>
+          <p class="text-body-sm" style="color:var(--outline);margin-top:0.75rem;">
+            Duration a product remains tagged as "NEW" after creation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Orders Activity -->
+    <section>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;">
+        <h2 class="section-header" style="margin-bottom:0;">Recent Orders</h2>
+        <a href="admin-orders.html" class="text-label-sm"
+          style="color:var(--primary);border-bottom:1px solid var(--primary);padding-bottom:0.125rem;">VIEW ALL</a>
+      </div>
+      <div id="recentOrders"
+        style="background:var(--surface-container-low);border-radius:var(--radius-2xl);padding:0.5rem;">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="noOrders" style="display:none;">
+        <div class="empty-state" style="padding:2rem;">
+          <span class="material-symbols-outlined empty-state__icon" style="font-size:2rem;">receipt_long</span>
+          <p class="empty-state__title" style="font-size:1rem;">No orders yet</p>
+          <p class="empty-state__text" style="font-size:0.8125rem;">Orders will appear here when customers place them.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ Side Drawer Style Override ═══ -->
+  <style>
+    #adminDrawer .modal-content {
+      transform: translateX(-100%) !important;
+    }
+
+    #adminDrawer.open .modal-content {
+      transform: translateX(0) !important;
+    }
+  </style>
+
+  <!-- ═══ Admin Bottom Nav ═══ -->
+  <nav class="bottom-nav-admin">
+    <a href="admin-dashboard.html" class="bottom-nav-admin__item active">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">dashboard</span>
+      <span>Stats</span>
+    </a>
+    <a href="admin-products.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">inventory_2</span>
+      <span>Products</span>
+    </a>
+    <a href="admin-diagnostics.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">query_stats</span>
+      <span>Insights</span>
+    </a>
+    <a href="admin-orders.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">receipt_long</span>
+      <span>Orders</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    KwabzStore.init();
+
+    // Seed data is now handled by Firestore initialization
+    if (!KwabzUtils.requireAdmin()) { /* redirects */ }
+
+    function renderDashboard() {
+      // Stats
+      document.getElementById('statProducts').textContent = KwabzStore.getAllProducts().length.toLocaleString();
+      document.getElementById('statCategories').textContent = KwabzStore.getCategories().length;
+      document.getElementById('statOrders').textContent = KwabzStore.getOrders().length;
+      document.getElementById('statSellers').textContent = KwabzStore.getSellers().length;
+
+      // Recent Orders
+      const orders = KwabzStore.getOrders().slice(0, 5);
+      const container = document.getElementById('recentOrders');
+      const noOrders = document.getElementById('noOrders');
+
+      if (orders.length === 0) {
+        container.style.display = 'none';
+        noOrders.style.display = 'block';
+        return;
+      }
+
+      noOrders.style.display = 'none';
+      container.innerHTML = orders.map(order => {
+        const statusIcon = order.status === 'pending' ? 'schedule' :
+          order.status === 'confirmed' ? 'check_circle' :
+            order.status === 'shipped' ? 'local_shipping' :
+              order.status === 'delivered' ? 'done_all' : 'receipt_long';
+
+        return `
+          <div class="activity-row">
+            <div style="display:flex;align-items:center;gap:1.5rem;">
+              <div class="activity-row__icon">
+                <span class="material-symbols-outlined" style="color:var(--primary);">${statusIcon}</span>
+              </div>
+              <div>
+                <p class="font-headline" style="font-weight:700;font-size:0.875rem;">Order ${order.order_number}</p>
+                <p style="font-size:0.75rem;color:var(--outline);font-weight:500;">
+                   ${order.customer.name} • ${KwabzUtils.formatPrice(order.total_price)}
+                </p>
+              </div>
+            </div>
+            <p class="text-label-sm" style="color:var(--outline);">${KwabzUtils.timeAgo(order.created_at)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function saveStoreSettings() {
+      const duration = parseInt(document.getElementById('newTagDurationInput').value);
+      if (isNaN(duration) || duration < 0) {
+        KwabzUtils.toast('Please enter a valid number of days', 'error');
+        return;
+      }
+
+      try {
+        await KwabzStore.updateSettings({ newTagDuration: duration });
+        KwabzUtils.toast('Settings updated and synced to cloud');
+      } catch (err) {
+        KwabzUtils.toast('Failed to update settings', 'error');
+      }
+    }
+
+    function initSettings() {
+      const settings = KwabzStore.getSettings();
+      document.getElementById('newTagDurationInput').value = settings.newTagDuration || 7;
+    }
+
+    // ─── Data listeners ───────────────────────────────────────
+    KwabzStore.on('sync_status', (status) => updateSyncBadge(status));
+    KwabzStore.on('settings_changed', () => initSettings());
+    KwabzStore.on('products_changed', () => renderDashboard());
+    KwabzStore.on('categories_changed', () => renderDashboard());
+    KwabzStore.on('orders_changed', () => renderDashboard());
+    KwabzStore.on('sellers_changed', () => renderDashboard());
+
+    function updateSyncBadge(status) {
+      const badge = document.getElementById('syncStatus');
+      if (!badge) return;
+      
+      const states = {
+        syncing: { text: 'SYNCING', color: 'var(--primary)', bg: 'var(--surface-container-highest)', icon: 'sync' },
+        online: { text: 'LIVE', color: '#166534', bg: '#dcfce7', icon: 'database' },
+        offline: { text: 'OFFLINE', color: 'var(--outline)', bg: 'var(--surface-container-high)', icon: 'cloud_off' }
+      };
+      
+      const s = states[status] || states.offline;
+      badge.style.color = s.color;
+      badge.style.background = s.bg;
+      badge.innerHTML = `<span class="material-symbols-outlined ${status === 'syncing' ? 'loading-spin-anim' : ''}" style="font-size:0.875rem;">${s.icon}</span> ${s.text}`;
+    }
+
+    // Add spin animation class
+    const style = document.createElement('style');
+    style.textContent = `@keyframes hubSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .loading-spin-anim { animation: hubSpin 2s linear infinite; }`;
+    document.head.appendChild(style);
+
+    updateSyncBadge(KwabzStore.getSyncStatus());
+    initSettings();
+    renderDashboard();
+  </script>
+</body>
+
+</html>

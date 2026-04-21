@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Independent Sellers — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .seller-hero {
+      padding: 6rem 1.5rem 4rem;
+      text-align: center;
+      background: var(--surface-container-low);
+    }
+    .seller-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+      gap: 2rem;
+      padding: 4rem 1.5rem;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+    .seller-card {
+      background: white;
+      border-radius: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      border: 1px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .seller-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      border-color: var(--primary);
+    }
+    .seller-card__img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: var(--surface-container);
+    }
+    .seller-card__content {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .seller-card__title {
+      font-family: var(--font-headline);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+    .seller-card__description {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .seller-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+    .tag-sm {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 0.75rem;
+      background: var(--surface-container-high);
+      border-radius: 1rem;
+      color: var(--on-surface-variant);
+    }
+  </style>
+</head>
+<body style="padding-bottom: 6rem;">
+
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="index.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline">Explore Sellers</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <a href="cart.html" class="icon-btn">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span class="cart-badge" data-cart-badge style="display:none;">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="seller-hero">
+      <h1 class="text-display" style="margin-bottom:1rem;">The Curator Network</h1>
+      <p class="text-body-lg" style="max-width:32rem; margin:0 auto; color:var(--outline);">
+        Discover independent mini-stores curated by students and local designers. Supporting unique styles across campus.
+      </p>
+    </section>
+
+    <div id="sellerGrid" class="seller-grid">
+      <!-- JS Populated -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptySellers" style="display:none; text-align:center; padding:5rem 2rem;">
+      <span class="material-symbols-outlined" style="font-size:4rem; color:var(--outline-variant);">storefront</span>
+      <h2 class="font-headline" style="margin-top:1.5rem;">New Sellers Coming Soon</h2>
+      <p style="color:var(--outline); margin-top:0.5rem;">Check back later as we onboard more student designers.</p>
+    </div>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Shop</span>
+    </a>
+    <a href="cart.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Cart</span>
+    </a>
+    <a href="sellers.html" class="bottom-nav__item active">
+      <span class="material-symbols-outlined filled">storefront</span>
+      <span>Sellers</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    KwabzStore.init();
+
+    function renderSellers() {
+      const sellers = KwabzStore.getSellers();
+      const container = document.getElementById('sellerGrid');
+      const empty = document.getElementById('emptySellers');
+
+      if (sellers.length === 0) {
+        container.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+
+      empty.style.display = 'none';
+      container.innerHTML = sellers.map(s => {
+        const catNames = (s.categories || []).map(cid => KwabzStore.getCategoryById(cid)?.name).filter(Boolean);
+        
+        return `
+          <div class="seller-card" onclick="window.location.href='seller-store.html?id=${s.id}'">
+            <img src="${s.image_url}" alt="${s.name}" class="seller-card__img" />
+            <div class="seller-card__content">
+              <h2 class="seller-card__title">${s.name}</h2>
+              <p class="seller-card__description">${s.description}</p>
+              <div class="seller-card__tags">
+                ${catNames.map(name => `<span class="tag-sm">${name}</span>`).join('')}
+                ${catNames.length === 0 ? '<span class="tag-sm">General Curator</span>' : ''}
+              </div>
+              <button class="btn-primary" style="margin-top:2rem; padding:0.75rem;">Enter Mini-Store</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    KwabzStore.on('sellers_changed', () => renderSellers());
+    KwabzStore.on('cart_changed', () => KwabzUtils.updateCartBadge());
+
+    setTimeout(renderSellers, 1000);
+    KwabzUtils.updateCartBadge();
+  </script>
+</body>
+</html>

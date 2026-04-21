@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Store — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .store-header {
+      padding: 6rem 1.5rem 3rem;
+      background: var(--surface-container-low);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .store-logo {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 2rem;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-ambient);
+      background: white;
+    }
+    .store-name {
+      font-family: var(--font-headline);
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .store-bio {
+      max-width: 30rem;
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .catalog-section {
+      padding: 3rem 1.5rem 6rem;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body style="padding-bottom: 6rem;">
+
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="sellers.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline" id="headerTitle">Mini Store</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <button class="icon-btn" onclick="shareStore()">
+        <span class="material-symbols-outlined">share</span>
+      </button>
+      <a href="cart.html" class="icon-btn">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span class="cart-badge" data-cart-badge style="display:none;">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="store-header">
+      <img id="sellerLogo" src="" alt="" class="store-logo" style="display:none;" />
+      <h1 id="sellerName" class="store-name">Loading...</h1>
+      <p id="sellerBio" class="store-bio"></p>
+      
+      <div id="sellerActions" style="margin-top:2rem; display:none;">
+        <button id="chatBtn" class="btn-whatsapp" style="width:auto; padding:0.875rem 2rem; background:var(--secondary); color:var(--on-secondary);">
+          <span class="material-symbols-outlined">chat</span>
+          Chat with Seller
+        </button>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <h2 class="font-headline" style="font-size:1.25rem;">Hand-Picked Collection</h2>
+        <p id="itemCount" class="text-label-sm" style="color:var(--outline);">0 ITEMS</p>
+      </div>
+
+      <div class="product-grid" id="sellerProductGrid">
+        <!-- JS Populated -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="noProducts" style="display:none; text-align:center; padding:5rem 2rem;">
+        <span class="material-symbols-outlined" style="font-size:3rem; color:var(--outline-variant);">inventory_2</span>
+        <p style="color:var(--outline); margin-top:1rem;">No products currently listed in this mini-store.</p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Shop</span>
+    </a>
+    <a href="cart.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Cart</span>
+    </a>
+    <a href="sellers.html" class="bottom-nav__item active">
+      <span class="material-symbols-outlined filled">storefront</span>
+      <span>Sellers</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    KwabzStore.init();
+
+    const sellerId = KwabzUtils.getParam('id');
+
+    async function renderStore() {
+      if (!sellerId) {
+        window.location.href = 'sellers.html';
+        return;
+      }
+
+      const seller = KwabzStore.getSellerById(sellerId);
+      if (!seller) {
+        // Might still be loading or truly missing
+        setTimeout(renderStore, 500);
+        return;
+      }
+
+      document.getElementById('sellerName').textContent = seller.name;
+      document.getElementById('headerTitle').textContent = seller.name;
+      document.getElementById('sellerBio').textContent = seller.description;
+      
+      const logo = document.getElementById('sellerLogo');
+      logo.src = seller.image_url;
+      logo.style.display = 'block';
+
+      // ─── Smart Context Branding ───
+      sessionStorage.setItem('kwabz_active_seller_id', sellerId);
+      sessionStorage.setItem('kwabz_active_seller_name', seller.name);
+      console.log('[Store] Smart branding context set to:', seller.name);
+
+      // WhatsApp Chat
+      const actionRow = document.getElementById('sellerActions');
+      const chatBtn = document.getElementById('chatBtn');
+      if (seller.whatsapp) {
+        actionRow.style.display = 'block';
+        chatBtn.onclick = () => {
+          const msg = encodeURIComponent(`Hello! I'm interested in your items in "${seller.name}" on Kwabz Store.`);
+          const cleanPhone = seller.whatsapp.replace(/\D/g, '');
+          window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
+        };
+      }
+
+      const products = KwabzStore.getProductsBySeller(sellerId);
+      const grid = document.getElementById('sellerProductGrid');
+      const noProd = document.getElementById('noProducts');
+      const count = document.getElementById('itemCount');
+
+      count.textContent = `${products.length} ITEMS`;
+
+      if (products.length === 0) {
+        grid.innerHTML = '';
+        noProd.style.display = 'block';
+        return;
+      }
+
+      noProd.style.display = 'none';
+      grid.innerHTML = products.map(p => {
+        const discPrice = KwabzUtils.calcDiscountedPrice(p.price, p.discount);
+        return `
+          <div class="product-card" onclick="window.location.href='product-detail.html?id=${p.id}'">
+            <div class="product-card__image-wrap">
+              <img class="product-card__image" src="${p.image_url}" alt="${p.name}" />
+              ${p.discount > 0 ? `<span class="product-card__badge product-card__badge--discount">-${p.discount}%</span>` : ''}
+            </div>
+            <div style="padding:0.5rem 0;">
+              <h3 class="product-card__name">${p.name}</h3>
+              <div class="product-card__price">
+                <span class="product-card__price-current">${KwabzUtils.formatPrice(discPrice)}</span>
+                ${p.discount > 0 ? `<span class="product-card__price-original">${KwabzUtils.formatPrice(p.price)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function shareStore() {
+      const seller = KwabzStore.getSellerById(sellerId);
+      if (!seller) return;
+      if (navigator.share) {
+        navigator.share({
+          title: seller.name + ' — Kwabz Store',
+          text: seller.description,
+          url: window.location.href
+        });
+      } else {
+        KwabzUtils.toast('Link copied to clipboard');
+        navigator.clipboard.writeText(window.location.href);
+      }
+    }
+
+    KwabzStore.on('sellers_changed', () => renderStore());
+    KwabzStore.on('products_changed', () => renderStore());
+    KwabzStore.on('cart_changed', () => KwabzUtils.updateCartBadge());
+
+    setTimeout(renderStore, 1000);
+    KwabzUtils.updateCartBadge();
+  </script>
+</body>
+</html>

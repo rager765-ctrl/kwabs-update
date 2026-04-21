@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Sign Up — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .auth-container {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background-color: #f9f9f9;
+      background-image: 
+        radial-gradient(at 0% 0%, hsla(0,0%,100%,1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(0,0%,98%,1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(0,0%,94%,1) 0, transparent 50%);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 3rem 2.5rem;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 2.5rem;
+      box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.01),
+        0 20px 40px -8px rgba(0, 0, 0, 0.05);
+      animation: cardEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cardEntry {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .auth-header {
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-header h1 {
+      font-family: var(--font-headline);
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.5rem;
+      color: var(--on-surface);
+      line-height: 1.1;
+    }
+
+    .auth-header p {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 1.5px solid var(--surface-container-high);
+      border-radius: 1.25rem;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.5);
+      color: var(--on-surface);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.03);
+      transform: translateY(-1px);
+    }
+
+    .form-group input::placeholder {
+      color: var(--outline-variant);
+      font-weight: 400;
+    }
+
+    .password-strength {
+      font-size: 0.75rem;
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .strength-bar {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .strength-dot {
+      flex: 1;
+      height: 4px;
+      background: var(--surface-container-high);
+      border-radius: 2px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .strength-dot.weak { background: #555; }
+    .strength-dot.fair { background: #333; }
+    .strength-dot.good { background: #000; }
+
+    .strength-text {
+      color: var(--on-surface-variant);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-width: 3rem;
+    }
+
+    .error-message {
+      padding: 1rem 1.25rem;
+      background: rgba(186, 26, 26, 0.05);
+      color: var(--error);
+      border: 1px solid rgba(186, 26, 26, 0.1);
+      border-radius: 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 1.125rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 1.25rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 1.5rem;
+    }
+
+    .signup-btn:hover {
+      background: #222;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -6px rgba(0,0,0,0.2);
+    }
+
+    .signup-btn:active {
+      transform: translateY(0);
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .auth-footer {
+      text-align: center;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      margin-top: 1rem;
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: all 0.2s;
+    }
+
+    .auth-footer a:hover {
+      color: var(--secondary);
+    }
+
+    .divider {
+      text-align: center;
+      margin: 2rem 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: var(--outline-variant);
+      opacity: 0.3;
+    }
+
+    .divider span {
+      position: relative;
+      background: transparent;
+      padding: 0 1rem;
+      color: var(--outline);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--on-surface-variant);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+      transform: translateX(-4px);
+    }
+
+    .success-message {
+      padding: 1.125rem;
+      background: rgba(78, 205, 196, 0.1);
+      color: #0b5e56;
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      border-radius: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <a href="index.html" class="back-link">
+        <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+        Back to Shop
+      </a>
+
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Join Kwabz Store & shop smart</p>
+      </div>
+
+      <div id="successMessage" class="success-message">
+        Account created! Redirecting...
+      </div>
+
+      <div id="errorMessage" class="error-message"></div>
+
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="At least 6 characters"
+            required
+            autocomplete="new-password"
+            minlength="6"
+          />
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-dot"></div>
+              <div class="strength-dot"></div>
+              <div class="strength-dot"></div>
+            </div>
+            <span class="strength-text">Weak</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm your password"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+
+        <button type="submit" class="signup-btn">Create Account</button>
+      </form>
+
+      <div class="divider">
+        <span>Already have an account?</span>
+      </div>
+
+      <div class="auth-footer">
+        <a href="login.html">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    KwabzStore.init();
+
+    // ─── Password Strength Indicator ───
+    const passwordInput = document.getElementById('password');
+    const strengthDots = document.querySelectorAll('.strength-dot');
+    const strengthText = document.querySelector('.strength-text');
+
+    function calculateStrength(pwd) {
+      let strength = 0;
+      if (pwd.length >= 8) strength++;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength++;
+      if (/\d/.test(pwd)) strength++;
+      if (/[!@#$%^&*]/.test(pwd)) strength++;
+      return strength;
+    }
+
+    passwordInput.addEventListener('input', () => {
+      const strength = calculateStrength(passwordInput.value);
+      
+      strengthDots.forEach((dot, i) => {
+        dot.classList.remove('weak', 'fair', 'good');
+        if (i < strength) {
+          dot.classList.add(strength === 1 ? 'weak' : strength === 2 ? 'fair' : 'good');
+        }
+      });
+
+      if (strength === 0) strengthText.textContent = 'Weak';
+      else if (strength === 1) strengthText.textContent = 'Weak';
+      else if (strength <= 2) strengthText.textContent = 'Fair';
+      else strengthText.textContent = 'Strong';
+    });
+
+    // ─── Form Submission ───
+    const form = document.getElementById('signupForm');
+    const signupBtn = form.querySelector('.signup-btn');
+    const errorDiv = document.getElementById('errorMessage');
+    const successDiv = document.getElementById('successMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // ─── Validation ───
+      if (!email) {
+        showError('Please enter your email');
+        return;
+      }
+
+      if (!password) {
+        showError('Please enter a password');
+        return;
+      }
+
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+
+      // ─── Sign Up ───
+      signupBtn.disabled = true;
+      signupBtn.classList.add('loading');
+      errorDiv.classList.remove('show');
+
+      try {
+        const user = await KwabzStore.emailSignUp(email, password);
+        
+        successDiv.classList.add('show');
+        successDiv.textContent = `✓ Account created! Welcome ${user.email}. Redirecting...`;
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+      } catch (err) {
+        console.error('Signup error:', err);
+        showError(err.message || 'Signup failed. Please try again.');
+        signupBtn.disabled = false;
+        signupBtn.classList.remove('loading');
+      }
+    });
+
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.classList.add('show');
+      setTimeout(() => {
+        errorDiv.classList.remove('show');
+      }, 5000);
+    }
+  </script>
+</body>
+
+</html>

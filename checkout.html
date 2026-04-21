@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Kwabz Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="cart.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline">Checkout</span>
+    </div>
+  </header>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="page-content">
+
+    <!-- Checkout Form -->
+    <div id="checkoutForm">
+      <div style="margin-bottom:2.5rem;">
+        <p class="text-label-md" style="color:var(--outline);margin-bottom:0.25rem;">Checkout</p>
+        <h2 class="font-headline text-headline-lg">Complete Your Order</h2>
+      </div>
+
+      <!-- Order Summary Mini -->
+      <section style="margin-bottom:3rem;">
+        <h3 class="section-header">Order Items</h3>
+        <div id="orderItems" style="background:var(--surface-container-low);border-radius:var(--radius-xl);padding:1rem;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding:0 0.25rem;">
+          <span class="text-label-md" style="color:var(--outline);">TOTAL</span>
+          <span id="checkoutTotal" class="font-headline" style="font-weight:800;font-size:1.5rem;"></span>
+        </div>
+      </section>
+
+      <!-- Customer Information -->
+      <section style="margin-bottom:3rem;">
+        <h3 class="section-header">Delivery Information</h3>
+        <div style="display:flex;flex-direction:column;gap:1.5rem;">
+          <div class="form-group">
+            <label class="form-group__label">Full Name</label>
+            <input id="customerName" class="minimal-input minimal-input--headline" type="text" placeholder="e.g. Kwame Asante" required />
+          </div>
+          <div class="form-group">
+            <label class="form-group__label">Phone Number</label>
+            <input id="customerPhone" class="minimal-input" type="tel" placeholder="e.g. +233 24 000 0000" required />
+          </div>
+          <div class="form-group">
+            <label class="form-group__label">Delivery Address</label>
+            <textarea id="customerAddress" class="minimal-input" rows="3" placeholder="Enter your full delivery address..." required style="resize:none;"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Visual Separator -->
+      <div style="height:1px;width:6rem;background:var(--primary);opacity:0.2;margin:0 auto 2rem;"></div>
+
+      <!-- WhatsApp Phone Number -->
+      <section style="margin-bottom:2rem;">
+        <div style="background:var(--surface-container-low);border-radius:var(--radius-xl);padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span class="font-headline" style="font-weight:700;font-size:0.9375rem;">WhatsApp Order</span>
+          </div>
+          <p class="text-body-sm" style="color:var(--on-surface-variant);margin-bottom:1rem;">
+            Your order will be sent via WhatsApp to the store for confirmation. Enter the store's WhatsApp number below.
+          </p>
+          <div class="form-group">
+            <label class="form-group__label">Store WhatsApp Number</label>
+            <input id="whatsappNumber" class="minimal-input" type="tel" placeholder="e.g. 233240000000 (with country code, no +)" value="233553866329" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Place Order Button -->
+      <button class="btn-whatsapp" id="placeOrderBtn" onclick="placeOrder()" style="margin-bottom:1rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Place Order via WhatsApp
+      </button>
+
+      <button class="btn-primary" id="placeOrderLocalBtn" onclick="placeOrderLocal()" style="background:var(--surface-container-highest);color:var(--on-surface);box-shadow:none;font-size:0.8125rem;">
+        Save Order Locally
+      </button>
+
+      <p style="text-align:center;font-size:0.6875rem;color:var(--outline);letter-spacing:0.1em;text-transform:uppercase;margin-top:1.5rem;">
+        Double check your details before placing order
+      </p>
+    </div>
+
+    <!-- Success State -->
+    <div id="successState" style="display:none;">
+      <div class="success-animation">
+        <div class="success-checkmark">
+          <span class="material-symbols-outlined" style="color:white;font-size:2.5rem;">check</span>
+        </div>
+        <h2 class="font-headline text-headline-lg" style="margin-bottom:0.5rem;">Order Placed!</h2>
+        <p class="text-body-md" style="color:var(--on-surface-variant);max-width:20rem;margin-bottom:0.5rem;">
+          Your order <strong id="orderNumber"></strong> has been created successfully.
+        </p>
+        <p class="text-body-sm" style="color:var(--outline);max-width:20rem;margin-bottom:2rem;">
+          If you chose WhatsApp, a message has been opened for you to send to the store.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:1.25rem;align-items:center;margin-top:2rem;">
+          <a id="viewReceiptBtn" href="#" class="btn-primary" style="width:auto;padding:1rem 2.5rem;background:white;color:black;border:1.5px solid black;display:flex;align-items:center;gap:0.75rem;">
+            <span class="material-symbols-outlined">description</span>
+            View & Download Receipt
+          </a>
+          <a href="shop.html" class="text-link" style="font-weight:700;letter-spacing:0.05em;text-transform:uppercase;font-size:0.75rem;">
+            Continue Shopping
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" style="display:none;">
+      <div class="empty-state">
+        <span class="material-symbols-outlined empty-state__icon">shopping_cart</span>
+        <p class="empty-state__title">No items to checkout</p>
+        <p class="empty-state__text">Add some items to your cart first.</p>
+        <a href="shop.html" class="btn-primary" style="width:auto;padding:1rem 2rem;margin-top:1.5rem;">
+          Browse Products
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer section -->
+    <footer style="padding:4rem 1.5rem; text-align:center; border-top:1px solid var(--outline-variant); margin-top:4rem;">
+      <h3 class="font-headline" style="margin-bottom:1rem; font-size:1.125rem;">Kwabz Store Online</h3>
+      <p class="text-label-sm" style="color:var(--outline); letter-spacing:0.1em; margin-bottom:2rem;">SMART COMMERCE • ACCRA, GHANA</p>
+      <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:1.5rem;">
+        <span class="material-symbols-outlined" style="color:var(--outline);">public</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">share</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">mail</span>
+      </div>
+      <p style="font-size:0.625rem; color:var(--outline); opacity:0.6; letter-spacing:0.05em;">
+        Developed by Mr Rager & 3 Strong Inc
+      </p>
+    </footer>
+  </main>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    KwabzStore.init();
+    KwabzUtils.initAuthNavigation();
+
+    // Pre-fill user info if logged in
+    KwabzStore.on('user_changed', user => {
+      if (user && !document.getElementById('customerName').value) {
+        document.getElementById('customerName').value = user.displayName || user.email.split('@')[0];
+      }
+    });
+
+    const currentUser = KwabzStore.getCurrentUser();
+    if (currentUser) {
+      document.getElementById('customerName').value = currentUser.displayName || currentUser.email.split('@')[0];
+    }
+    // Seed data is now handled by Firestore initialization
+    
+    function renderCheckout() {
+      const cart = KwabzStore.getCart();
+
+      // ─── Smart Header Branding ───
+      const sellerBranding = KwabzUtils.getCartBranding();
+      const titleEl = document.querySelector('.top-app-bar__title');
+      const subHeader = document.querySelector('.text-label-md');
+      
+      if (sellerBranding) {
+        if (titleEl) titleEl.textContent = `Checkout: ${sellerBranding}`;
+        if (subHeader) subHeader.textContent = `Ordering from ${sellerBranding}`;
+      } else {
+        if (titleEl) titleEl.textContent = 'Checkout';
+        if (subHeader) subHeader.textContent = 'Checkout';
+      }
+
+      if (cart.length === 0) {
+        document.getElementById('checkoutForm').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('checkoutForm').style.display = 'block';
+      document.getElementById('emptyState').style.display = 'none';
+
+      // Render order items
+      const container = document.getElementById('orderItems');
+      container.innerHTML = cart.map(item => `
+        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.625rem 0.25rem;">
+          <img src="${item.image_url}" alt="${item.name}"
+            style="width:2.5rem;height:2.5rem;object-fit:cover;border-radius:var(--radius-md);flex-shrink:0;" />
+          <div style="flex:1;min-width:0;">
+            <p style="font-weight:600;font-size:0.8125rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.name}</p>
+            <p style="font-size:0.6875rem;color:var(--outline);">Qty: ${item.quantity}</p>
+          </div>
+          <span style="font-weight:700;font-size:0.8125rem;flex-shrink:0;">${KwabzUtils.formatPrice(item.price * item.quantity)}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('checkoutTotal').textContent = KwabzUtils.formatPrice(KwabzStore.getCartTotal());
+
+      // Intelligent WhatsApp Number selection
+      if (cart.length > 0) {
+        const firstSellerId = cart[0].seller_id;
+        const allSameSeller = cart.every(item => item.seller_id === firstSellerId);
+        
+        if (allSameSeller && firstSellerId && firstSellerId !== 'main') {
+          const seller = KwabzStore.getSellerById(firstSellerId);
+          if (seller && seller.whatsapp) {
+            document.getElementById('whatsappNumber').value = seller.whatsapp.replace(/\+/g, '');
+          }
+        }
+      }
+    }
+
+    function validateForm() {
+      const name = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const address = document.getElementById('customerAddress').value.trim();
+
+      if (!name) { KwabzUtils.toast('Please enter your name', 'error'); return null; }
+      if (!phone) { KwabzUtils.toast('Please enter your phone number', 'error'); return null; }
+      if (!address) { KwabzUtils.toast('Please enter your delivery address', 'error'); return null; }
+
+      return { name, phone, address };
+    }
+
+    async function placeOrder() {
+      const customerInfo = validateForm();
+      if (!customerInfo) return;
+
+      const btn = document.getElementById('placeOrderBtn');
+      const originalInner = btn.innerHTML;
+      btn.innerHTML = 'Processing Order...';
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.7';
+
+      try {
+        const order = await KwabzStore.createOrder(customerInfo);
+        
+        if (!order) {
+          KwabzUtils.toast('Failed to create order', 'error');
+          return;
+        }
+
+        // Send via WhatsApp
+        const whatsappNum = document.getElementById('whatsappNumber').value.trim() || '233000000000';
+        KwabzStore.sendOrderViaWhatsApp(order, whatsappNum);
+
+        // Show success
+        showSuccess(order);
+      } catch (err) {
+        KwabzUtils.toast('Network delay. Please check your connection.', 'error');
+      } finally {
+        btn.innerHTML = originalInner;
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+      }
+    }
+
+    async function placeOrderLocal() {
+      const customerInfo = validateForm();
+      if (!customerInfo) return;
+
+      const btn = document.getElementById('placeOrderLocalBtn');
+      const originalInner = btn.innerHTML;
+      btn.innerHTML = 'Saving...';
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.7';
+
+      try {
+        const order = await KwabzStore.createOrder(customerInfo);
+        if (!order) {
+          KwabzUtils.toast('Failed to create order', 'error');
+          return;
+        }
+        showSuccess(order);
+      } catch (err) {
+        KwabzUtils.toast('Network delay. Please check your connection.', 'error');
+      } finally {
+        btn.innerHTML = originalInner;
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+      }
+    }
+
+    function showSuccess(order) {
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+      document.getElementById('orderNumber').textContent = order.order_number;
+      
+      // Update receipt link
+      const btn = document.getElementById('viewReceiptBtn');
+      if (btn) btn.href = `receipt.html?id=${order.id}`;
+    }
+
+    KwabzStore.on('cart_changed', () => renderCheckout());
+    KwabzStore.on('user_changed', () => renderCheckout());
+    KwabzStore.on('products_changed', () => renderCheckout());
+
+    renderCheckout();
+  </script>
+</body>
+</html>

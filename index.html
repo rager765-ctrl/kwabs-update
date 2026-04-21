@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Kwabz Store — Smart Style for Every Student</title>
+  <meta name="description"
+    content="High-quality essentials at student-friendly prices. Discover everything you need for your campus journey at Kwabz Store." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --hero-height: 100vh;
+    }
+
+    body {
+      overflow-x: hidden;
+      background-color: var(--surface);
+    }
+
+    .landing-hero {
+      position: relative;
+      height: var(--hero-height);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem 1.5rem;
+      color: white;
+      overflow: hidden;
+    }
+
+    .landing-hero__image {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .landing-hero__image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      transform: scale(1.05);
+    }
+
+    .landing-hero__image img.active {
+      opacity: 1;
+      animation: heroZoom 25s infinite alternate ease-in-out;
+    }
+
+    .landing-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.1) 100%);
+      z-index: 0;
+    }
+
+    .landing-hero__content {
+      position: relative;
+      z-index: 10;
+      max-width: 40rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s forwards 0.5s;
+    }
+
+    .landing-hero__tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: block;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .landing-hero__title {
+      font-family: var(--font-headline);
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .landing-hero__description {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-landing {
+      padding: 1.25rem 2.5rem;
+      border-radius: 4rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      text-align: center;
+      border: none;
+    }
+
+    .btn-landing--primary {
+      background: white;
+      color: black;
+    }
+
+    .btn-landing--primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-landing--outline {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-landing--outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: white;
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.6;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes heroZoom {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0) translateX(-50%);
+      }
+
+      40% {
+        transform: translateY(-10px) translateX(-50%);
+      }
+
+      60% {
+        transform: translateY(-5px) translateX(-50%);
+      }
+    }
+
+    /* Collection Preview Section */
+    .section-preview {
+      padding: 6rem 1.5rem;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+
+    .grid-preview {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .landing-hero__title {
+        font-size: 5rem;
+      }
+
+      .grid-preview {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .landing-hero__title {
+        font-size: 2.75rem;
+      }
+
+      .cta-group {
+        flex-direction: column;
+      }
+
+      .btn-landing {
+        width: 100%;
+      }
+
+      .scroll-indicator {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="top-app-bar" style="background:transparent; border-bottom:none;">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span class="top-app-bar__title font-headline"
+        style="color:white; font-weight:900; letter-spacing:-0.05em; font-size:1.25rem;">Kwabz Store</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <button class="icon-btn" style="color:white;" onclick="openSellerModal()">
+        <span class="material-symbols-outlined">notifications</span>
+        <span
+          style="position:absolute; top:4px; right:4px; width:8px; height:8px; background:#ff4757; border-radius:50%; border:2px solid black;"></span>
+      </button>
+      <a href="cart.html" class="icon-btn" style="color:white;">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span class="cart-badge" data-cart-badge style="display:none;">0</span>
+      </a>
+      <a href="login.html" class="icon-btn" style="color:white;">
+        <span class="material-symbols-outlined">person</span>
+      </a>
+    </div>
+  </header>
+
+
+  <main>
+    <section class="landing-hero">
+      <div class="landing-hero__image" id="heroImages">
+        <img class="active"
+          src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=1974"
+          alt="Kwabz Store Fashion Student" />
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1974"
+          alt="Vibrant Student Style" />
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1974"
+          alt="Campus Lifestyle" />
+      </div>
+      <div class="landing-hero__overlay"></div>
+
+      <div class="landing-hero__content">
+        <span class="landing-hero__tag">For Students, By Students</span>
+        <h1 class="landing-hero__title">Your Campus Essentials, Simplified.</h1>
+        <p class="landing-hero__description">
+          Premium quality meets student affordability. Discover the best gear, style, and essentials to help you conquer
+          your semester without breaking the bank.
+        </p>
+
+        <div class="cta-group">
+          <a href="shop.html" class="btn-landing btn-landing--primary"
+            style="text-decoration:none; display:inline-block;">Enter Store</a>
+          <a href="sellers.html" class="btn-landing btn-landing--outline"
+            style="text-decoration:none; display:inline-block; border-color:var(--secondary);">Other Sellers</a>
+          <a href="shop.html?search=true" class="btn-landing btn-landing--outline"
+            style="text-decoration:none; display:inline-block;">Search
+            Items</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <span class="text-label-sm" style="color:white; font-size:0.625rem; letter-spacing:0.2em;">SCROLL</span>
+        <span class="material-symbols-outlined" style="color:white;">expand_more</span>
+      </div>
+    </section>
+
+    <!-- Content Sections -->
+    <section class="section-preview">
+      <div style="margin-bottom:4rem; text-align:center;">
+        <h2 class="font-headline" style="font-size:2.5rem; letter-spacing:-0.03em; margin-bottom:1rem;">Top Picks</h2>
+        <p class="text-body-lg" style="color:var(--outline); margin: 0 auto; max-width: 30rem;">
+          Hand-picked essentials designed for the modern student lifestyle and wallet.
+        </p>
+      </div>
+
+      <div class="grid-preview" id="previewGrid">
+        <!-- JS will populate with some products if available -->
+      </div>
+
+      <div style="margin-top:4rem; text-align:center;">
+        <a href="shop.html" class="btn-secondary" style="width:auto; padding:1.25rem 3rem;">View Entire Catalog</a>
+      </div>
+    </section>
+
+    <footer
+      style="padding:4rem 1.5rem; text-align:center; border-top:1px solid var(--outline-variant); margin-bottom: 5rem;">
+      <h3 class="font-headline" style="margin-bottom:1rem;">Kwabz Store Online</h3>
+      <p class="text-label-sm" style="color:var(--outline); letter-spacing:0.1em; margin-bottom:2rem;">SMART COMMERCE •
+        ACCRA, GHANA</p>
+      <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:1.5rem;">
+        <span class="material-symbols-outlined" style="color:var(--outline);">public</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">share</span>
+        <span class="material-symbols-outlined" style="color:var(--outline);">mail</span>
+      </div>
+      <p style="font-size:0.625rem; color:var(--outline); opacity:0.6; letter-spacing:0.05em;">
+        Developed by Mr Rager & 3 Strong Inc
+      </p>
+    </footer>
+  </main>
+
+  <!-- ═══ Bottom Navigation ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav__item active">
+      <span class="material-symbols-outlined filled">home</span>
+      <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Shop</span>
+    </a>
+    <a href="cart.html" class="bottom-nav__item" style="position:relative;">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Cart</span>
+      <span class="cart-badge" data-cart-badge
+        style="display:none; position:absolute; top:0.125rem; right:0.5rem;">0</span>
+    </a>
+    <a id="authNavLink" href="login.html" class="bottom-nav__item">
+      <span class="material-symbols-outlined">person</span>
+      <span id="authNavText">Sign In</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    KwabzStore.init();
+
+    // ─── Auth Navigation ───
+    KwabzUtils.initAuthNavigation();
+
+    function renderPreview() {
+      const allProducts = KwabzStore.getProducts();
+      // Pick 4 in-stock products
+      const products = allProducts.filter(p => p.in_stock !== false).slice(0, 4);
+      const container = document.getElementById('previewGrid');
+
+      if (products.length === 0) return;
+
+      container.innerHTML = products.map(p => {
+        const discountedPrice = KwabzUtils.calcDiscountedPrice(p.price, p.discount);
+        return `
+          <div class="product-card" onclick="window.location.href='product-detail.html?id=${p.id}'" style="border:none;">
+            <div class="product-card__image-wrap" style="aspect-ratio:3/4; border-radius:var(--radius-lg); overflow:hidden;">
+              <img class="product-card__image" src="${p.image_url}" alt="${p.name}" />
+            </div>
+            <div style="padding:1rem 0;">
+              <p class="product-card__name" style="font-weight:600;">${p.name}</p>
+              <p class="product-card__price" style="font-size:0.75rem;">${KwabzUtils.formatPrice(discountedPrice)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    KwabzStore.on('products_changed', () => renderPreview());
+    KwabzStore.on('cart_changed', () => KwabzUtils.updateCartBadge());
+
+    // ─── Hero Slider ──────────────────────────────────────────
+    function startHeroSlider() {
+      const container = document.getElementById('heroImages');
+      const imgs = container.getElementsByTagName('img');
+      let current = 0;
+
+      setInterval(() => {
+        imgs[current].classList.remove('active');
+        current = (current + 1) % imgs.length;
+        imgs[current].classList.add('active');
+      }, 7000);
+    }
+
+    // Initial render attempt
+    setTimeout(renderPreview, 1000);
+    KwabzUtils.updateCartBadge();
+    startHeroSlider();
+  </script>
+
+  <!-- ═══ Seller Program Modal (Moved to Bottom) ═══ -->
+  <div id="sellerModal"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
+    <div
+      style="background:white; width:100%; max-width:400px; padding:2.5rem; border-radius:2.5rem; position:relative; text-align:center; animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+      <button onclick="closeSellerModal()" style="position:absolute; top:1.5rem; right:1.5rem; color:var(--outline);">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <div
+        style="width:4rem; height:4rem; background:var(--surface-container); border-radius:1.5rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;">
+        <span class="material-symbols-outlined" style="font-size:2rem; color:var(--primary);">storefront</span>
+      </div>
+      <h2 class="font-headline" style="font-size:1.5rem; font-weight:900; margin-bottom:1rem; letter-spacing:-0.03em;">
+        Become a Seller</h2>
+      <p style="color:var(--on-surface-variant); font-size:0.9375rem; line-height:1.6; margin-bottom:2rem;">
+        Want to list your products on Kwabz Store? Join our curator program and reach thousands of customers.
+        <br><br>
+        <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--outline);">* Listing fees
+          apply per item</span>
+      </p>
+      <a href="https://wa.me/233000000000?text=Hello,%20I'm%20interested%20in%20listing%20my%20items%20on%20Kwabz%20Store."
+        class="btn-primary"
+        style="display:flex; align-items:center; justify-content:center; gap:0.75rem; padding:1.25rem;">
+        <span class="material-symbols-outlined">send</span>
+        Contact via WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalSlide {
+      from {
+        transform: translateY(20px) scale(0.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <script>
+    function openSellerModal() {
+      const modal = document.getElementById('sellerModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    function closeSellerModal() {
+      const modal = document.getElementById('sellerModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+    // Close on overlay click
+    document.getElementById('sellerModal').addEventListener('click', (e) => {
+      if (e.target.id === 'sellerModal') closeSellerModal();
+    });
+  </script>
+</body>
+
+</html>

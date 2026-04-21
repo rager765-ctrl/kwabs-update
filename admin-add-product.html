@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Product — Kwabz Store Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══ Top App Bar ═══ -->
+  <header class="top-app-bar glass">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="admin-products.html" class="icon-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <span class="top-app-bar__title font-headline" id="pageTitle">Add Product</span>
+    </div>
+    <div class="top-app-bar__actions">
+      <button class="icon-btn">
+        <span class="material-symbols-outlined">more_vert</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ Main Content ═══ -->
+  <main class="page-content page-content--admin" style="padding-bottom:10rem;">
+
+    <!-- Breadcrumb -->
+    <div style="margin-bottom:2.5rem;">
+      <p class="text-label-md" style="color:var(--outline);margin-bottom:0.25rem;">Catalog Management</p>
+      <h2 class="font-headline text-display" id="formHeading">New Inventory Item</h2>
+    </div>
+
+    <form id="productForm" onsubmit="handleSubmit(event)" style="display:flex;flex-direction:column;gap:3rem;">
+
+      <!-- Image Upload -->
+      <div class="form-group">
+        <label class="form-group__label">Product Imagery</label>
+        <div class="upload-zone" id="uploadZone">
+          <span class="material-symbols-outlined" style="font-size:2.5rem;color:var(--outline);margin-bottom:1rem;" id="uploadIcon">add_a_photo</span>
+          <p class="font-headline" style="font-weight:700;font-size:1.125rem;" id="uploadText">Upload Hero Image</p>
+          <p class="text-body-sm" style="color:var(--outline);">Drag & drop or click to browse (Max 5MB)</p>
+          <input type="file" accept="image/*" id="imageInput" onchange="handleImageUpload(this)" />
+          <img id="imagePreview" class="upload-zone__preview" style="display:none;" />
+        </div>
+        <input type="text" id="imageUrlInput" class="minimal-input" placeholder="Or paste an image URL..." style="margin-top:0.75rem;font-size:0.8125rem;" oninput="handleImageUrl(this.value)" />
+      </div>
+
+      <!-- Grid Fields -->
+      <div style="display:grid;grid-template-columns:1fr;gap:1.5rem;">
+
+        <!-- Product Name -->
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-group__label">Product Name</label>
+          <input id="productName" class="minimal-input minimal-input--headline" type="text" placeholder="e.g. Minimalist Sculptural Vase" required />
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-group__label">Category</label>
+          <div style="position:relative;">
+            <select id="productCategory" class="minimal-select" required>
+              <!-- Populated by JS -->
+            </select>
+            <span class="material-symbols-outlined" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--outline);">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Seller Association -->
+        <div class="form-group">
+          <label class="form-group__label">Assigned Seller</label>
+          <div style="position:relative;">
+            <select id="productSeller" class="minimal-select">
+              <option value="main">Kwabz Store (Primary)</option>
+              <!-- Populated by JS -->
+            </select>
+            <span class="material-symbols-outlined" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--outline);">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+          <label class="form-group__label">Price (GH₵)</label>
+          <div style="position:relative;">
+            <input id="productPrice" class="minimal-input" type="number" step="0.01" min="0" placeholder="0.00" required />
+            <span style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:var(--outline);font-size:0.6875rem;font-weight:700;letter-spacing:0.1em;">GHS</span>
+          </div>
+        </div>
+
+        <!-- Discount -->
+        <div class="form-group">
+          <label class="form-group__label">Discount (%)</label>
+          <input id="productDiscount" class="minimal-input" type="number" min="0" max="100" placeholder="0" />
+        </div>
+
+        <!-- Stock -->
+        <div class="form-group">
+          <label class="form-group__label">Stock Quantity</label>
+          <input id="productStock" class="minimal-input" type="number" min="0" placeholder="100" required />
+        </div>
+
+        <!-- Availability Status -->
+        <div class="form-group">
+          <label class="form-group__label">Availability Status</label>
+          <div style="position:relative;">
+            <select id="productAvailability" class="minimal-select">
+              <option value="in_stock">In Stock (Available Now)</option>
+              <option value="pre_order">Pre-order (Buy now, ship later)</option>
+            </select>
+            <span class="material-symbols-outlined" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--outline);">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-group__label">Editorial Description</label>
+          <textarea id="productDescription" class="minimal-input" rows="4" placeholder="Crafted with intentionality..." style="resize:none;"></textarea>
+        </div>
+      </div>
+
+      <!-- Visual Separator -->
+      <div style="height:1px;width:6rem;background:var(--primary);opacity:0.2;"></div>
+
+      <!-- Visibility Toggle -->
+      <div style="background:var(--surface-container-low);border-radius:var(--radius-xl);padding:1.5rem;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h4 class="font-headline" style="font-weight:700;">Public Visibility</h4>
+          <p class="text-body-sm" style="color:var(--outline);">Product will be live in the store immediately</p>
+        </div>
+        <div class="toggle-switch active" id="visibilityToggle" onclick="this.classList.toggle('active')">
+          <div class="toggle-switch__knob"></div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <button type="submit" class="btn-primary" id="submitBtn">
+          Save Product
+        </button>
+        <p style="text-align:center;font-size:0.6875rem;color:var(--outline);letter-spacing:0.1em;text-transform:uppercase;margin-top:1.5rem;">
+          Double check inventory specs before committing
+        </p>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- ═══ Admin Bottom Nav ═══ -->
+  <nav class="bottom-nav-admin">
+    <a href="admin-dashboard.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">dashboard</span>
+      <span>Stats</span>
+    </a>
+    <a href="admin-products.html" class="bottom-nav-admin__item active">
+      <span class="material-symbols-outlined filled" style="font-size:1.25rem;">inventory_2</span>
+      <span>Products</span>
+    </a>
+    <a href="admin-diagnostics.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">query_stats</span>
+      <span>Insights</span>
+    </a>
+    <a href="admin-orders.html" class="bottom-nav-admin__item">
+      <span class="material-symbols-outlined" style="font-size:1.25rem;">receipt_long</span>
+      <span>Orders</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="store.js"></script>
+  <script src="utils.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt6xHMVvJ82iJSb8XO_bYGfxLKncG8oUE",
+      authDomain: "mr-rager.firebaseapp.com",
+      projectId: "mr-rager",
+      storageBucket: "mr-rager.firebasestorage.app",
+      messagingSenderId: "731077938078",
+      appId: "1:731077938078:web:878fc483d6e1921bcca48f",
+      measurementId: "G-1Y14WBJV3H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    KwabzStore.init();
+    // Seed data is now handled by Firestore initialization
+    if (!KwabzUtils.requireAdmin()) { /* redirects */ }
+
+    let imageDataUrl = '';
+    let editingProductId = KwabzUtils.getParam('edit');
+    let latchedSellerId = KwabzUtils.getParam('seller_id') || null;
+
+    // ─── Populate Categories ──────────────────────────────────
+    function populateCategories() {
+      const select = document.getElementById('productCategory');
+      const categories = KwabzStore.getCategories();
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">Select a category</option>' +
+        categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      if (currentVal) select.value = currentVal;
+    }
+
+    function populateSellers() {
+      const select = document.getElementById('productSeller');
+      const sellers = KwabzStore.getSellers();
+      const currentVal = select.value;
+      
+      select.innerHTML = '<option value="main">Kwabz Store (Primary)</option>' +
+        sellers.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      
+      if (latchedSellerId) {
+        select.value = latchedSellerId;
+      } else if (currentVal) {
+        select.value = currentVal;
+      }
+    }
+
+    // ─── Image Upload (file → data URL) ──────────────────────
+    async function handleImageUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        KwabzUtils.toast('Image must be under 5MB', 'error');
+        return;
+      }
+
+      try {
+        imageDataUrl = await KwabzUtils.fileToDataURL(file);
+        showPreview(imageDataUrl);
+      } catch (err) {
+        KwabzUtils.toast('Failed to load image', 'error');
+      }
+    }
+
+    function handleImageUrl(url) {
+      if (url.trim()) {
+        imageDataUrl = url.trim();
+        showPreview(url.trim());
+      }
+    }
+
+    function showPreview(src) {
+      const preview = document.getElementById('imagePreview');
+      preview.src = src;
+      preview.style.display = 'block';
+      document.getElementById('uploadIcon').style.display = 'none';
+      document.getElementById('uploadText').style.display = 'none';
+    }
+
+    // ─── Edit Mode ────────────────────────────────────────────
+    function loadProductForEdit() {
+      // Check for seller_id pre-selection first
+      const preSellerId = KwabzUtils.getParam('seller_id');
+      if (preSellerId && !editingProductId) {
+        document.getElementById('productSeller').value = preSellerId;
+      }
+      
+      if (!editingProductId) return;
+
+      const product = KwabzStore.getProductById(editingProductId);
+      if (!product) {
+        KwabzUtils.toast('Product not found', 'error');
+        return;
+      }
+
+      document.getElementById('pageTitle').textContent = 'Edit Product';
+      document.getElementById('formHeading').textContent = 'Edit Item';
+      document.getElementById('submitBtn').textContent = 'Update Product';
+
+      document.getElementById('productName').value = product.name;
+      document.getElementById('productCategory').value = product.category_id;
+      document.getElementById('productPrice').value = product.price;
+      document.getElementById('productDiscount').value = product.discount || '';
+      document.getElementById('productStock').value = product.stock;
+      document.getElementById('productDescription').value = product.description || '';
+      document.getElementById('productAvailability').value = product.availability || 'in_stock';
+      document.getElementById('productSeller').value = product.seller_id || 'main';
+
+      if (product.image_url) {
+        imageDataUrl = product.image_url;
+        showPreview(product.image_url);
+        document.getElementById('imageUrlInput').value = product.image_url;
+      }
+
+      const toggle = document.getElementById('visibilityToggle');
+      if (!product.in_stock) toggle.classList.remove('active');
+    }
+
+    // ─── Submit ───────────────────────────────────────────────
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const productData = {
+        name: document.getElementById('productName').value.trim(),
+        category_id: document.getElementById('productCategory').value,
+        price: parseFloat(document.getElementById('productPrice').value),
+        discount: parseInt(document.getElementById('productDiscount').value) || 0,
+        stock: parseInt(document.getElementById('productStock').value) || 0,
+        description: document.getElementById('productDescription').value.trim(),
+        image_url: imageDataUrl || '',
+        in_stock: document.getElementById('visibilityToggle').classList.contains('active'),
+        availability: document.getElementById('productAvailability').value,
+        seller_id: document.getElementById('productSeller').value
+      };
+
+      if (!productData.name) { KwabzUtils.toast('Product name is required', 'error'); return; }
+      if (!productData.category_id) { KwabzUtils.toast('Please select a category', 'error'); return; }
+      if (productData.price <= 0) { KwabzUtils.toast('Price must be greater than 0', 'error'); return; }
+
+      // ─── Selection Safety Check ───
+      if (latchedSellerId && productData.seller_id !== latchedSellerId) {
+        KwabzUtils.toast('Linking to seller... Please wait for the store list to sync', 'warning');
+        return;
+      }
+
+      try {
+        if (editingProductId) {
+          await KwabzStore.updateProduct(editingProductId, productData);
+          KwabzUtils.toast('Product updated successfully');
+        } else {
+          await KwabzStore.addProduct(productData);
+          KwabzUtils.toast('Product added successfully');
+        }
+
+        setTimeout(() => {
+          window.location.href = 'admin-products.html';
+        }, 800);
+      } catch (err) {
+        KwabzUtils.toast('Failed to save product: ' + err.message, 'error');
+      }
+    }
+
+    // ─── Data listeners ───────────────────────────────────────
+    KwabzStore.on('categories_changed', () => {
+      populateCategories();
+      if (editingProductId) loadProductForEdit();
+    });
+    KwabzStore.on('products_changed', () => {
+      if (editingProductId) loadProductForEdit();
+    });
+    KwabzStore.on('sellers_changed', () => {
+      populateSellers();
+      loadProductForEdit();
+    });
+
+    // ─── Init ─────────────────────────────────────────────────
+    populateCategories();
+    populateSellers();
+    loadProductForEdit();
+  </script>
+</body>
+</html>
