@@ -215,14 +215,30 @@ const KwabzUtils = {
   },
 
   /**
+   * Require user to be logged in. Handles Firebase initialization delay.
+   */
   requireLogin() {
-    const user = KwabzStore.getCurrentUser();
-    if (!user) {
-      KwabzUtils.toast('Please sign in to continue', 'info');
-      window.location.href = 'login.html';
-      return false;
+    const check = () => {
+      if (!KwabzStore.getCurrentUser()) {
+        KwabzUtils.toast('Please sign in to continue', 'info');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1000);
+        return false;
+      }
+      return true;
+    };
+
+    if (KwabzStore.getSyncStatus() === 'syncing') {
+      KwabzStore.on('user_changed', () => {
+        if (!KwabzStore.getCurrentUser()) {
+          check();
+        }
+      });
+      return true; // Assume okay for now to prevent flash-redirect
     }
-    return true;
+
+    return check();
   },
 
   /**

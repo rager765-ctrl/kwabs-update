@@ -6,6 +6,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Shopping Cart — Kwabz Store</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .cart-layout {
+        grid-template-columns: 1fr 380px;
+      }
+    }
+    
+    .cart-item-card {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cart-item-header {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .cart-item-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      flex-shrink: 0;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--outline-variant);
+      padding-top: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    @media (min-width: 600px) {
+      .cart-item-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cart-item-controls {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+        gap: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container" style="max-width: 900px; margin: 0 auto; padding: 1.5rem; padding-top: 2rem;">
@@ -29,7 +88,7 @@
     </div>
 
     <!-- Cart Content -->
-    <div id="cartContent" style="display: none; display: grid; grid-template-columns: 1fr 380px; gap: 2rem;">
+    <div id="cartContent" class="cart-layout" style="display: none;">
       <div id="cartItemsContainer" style="display: flex; flex-direction: column; gap: 1rem;"></div>
 
       <div style="background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); border-radius: var(--radius-2xl); padding: 1.5rem; height: fit-content; position: sticky; top: 1.5rem;">
@@ -91,6 +150,7 @@
     }
 
     KwabzStore.init();
+    if (!KwabzUtils.requireLogin()) throw new Error("Auth required");
     KwabzUtils.initAuthNavigation();
 
     // ─── Cart Page Logic ───
@@ -115,20 +175,23 @@
       cartContent.style.display = 'grid';
 
       cartItemsContainer.innerHTML = cart.map(item => `
-        <div style="background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); border-radius: var(--radius-xl); padding: 1.25rem; display: flex; gap: 1rem; align-items: center;">
-          <img src="${item.image_url}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-lg);" />
-          <div style="flex: 1;">
-            <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 0.25rem;">${item.name}</h3>
-            <p style="color: var(--primary); font-weight: 700;">${KwabzUtils.formatPrice(item.price)}</p>
-          </div>
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="display: flex; align-items: center; background: var(--surface-container); border-radius: 4rem; padding: 0.25rem;">
-              <button onclick="updateQty('${item.product_id}', ${item.quantity - 1})" style="width: 32px; height: 32px; border-radius: 50%; border: none; background: white; cursor: pointer; font-size: 1.25rem;">-</button>
-              <span style="padding: 0 0.75rem; font-weight: 600;">${item.quantity}</span>
-              <button onclick="updateQty('${item.product_id}', ${item.quantity + 1})" style="width: 32px; height: 32px; border-radius: 50%; border: none; background: white; cursor: pointer; font-size: 1.25rem;">+</button>
+        <div class="cart-item-card">
+          <div class="cart-item-header">
+            <img class="cart-item-img" src="${item.image_url}" alt="${item.name}" />
+            <div style="flex: 1; min-width: 0;">
+              <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</h3>
+              <p style="color: var(--primary); font-weight: 700;">${KwabzUtils.formatPrice(item.price)}</p>
             </div>
-            <button onclick="removeFromCart('${item.product_id}')" style="color: var(--error); border: none; background: none; cursor: pointer; padding: 0.5rem;" title="Remove">
-              <span class="material-symbols-outlined">delete</span>
+          </div>
+          
+          <div class="cart-item-controls">
+            <div style="display: flex; align-items: center; background: var(--surface-container); border-radius: 4rem; padding: 0.25rem;">
+              <button onclick="updateQty('${item.product_id}', ${item.quantity - 1})" style="width: 32px; height: 32px; border-radius: 50%; border: none; background: white; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center;">-</button>
+              <span style="padding: 0 1rem; font-weight: 600;">${item.quantity}</span>
+              <button onclick="updateQty('${item.product_id}', ${item.quantity + 1})" style="width: 32px; height: 32px; border-radius: 50%; border: none; background: white; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center;">+</button>
+            </div>
+            <button onclick="removeFromCart('${item.product_id}')" style="color: var(--error); border: none; background: var(--surface-container); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Remove">
+              <span class="material-symbols-outlined" style="font-size: 1.25rem;">delete</span>
             </button>
           </div>
         </div>

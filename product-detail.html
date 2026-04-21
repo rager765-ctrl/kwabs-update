@@ -171,6 +171,7 @@
     }
     
     KwabzStore.init();
+    if (!KwabzUtils.requireLogin()) throw new Error("Auth required");
     KwabzUtils.initAuthNavigation();
 
     // ─── Smart Branding Context ───

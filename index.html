@@ -398,6 +398,15 @@
     KwabzStore.on('products_changed', () => renderPreview());
     KwabzStore.on('cart_changed', () => KwabzUtils.updateCartBadge());
 
+    function quickAdd(productId) {
+      if (!KwabzUtils.requireLogin()) return;
+      const product = KwabzStore.getProductById(productId);
+      if (!product) return;
+      KwabzStore.addToCart(product);
+      KwabzUtils.toast('Added to cart');
+      KwabzUtils.updateCartBadge();
+    }
+
     // ─── Hero Slider ──────────────────────────────────────────
     function startHeroSlider() {
       const container = document.getElementById('heroImages');

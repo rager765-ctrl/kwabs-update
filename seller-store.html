@@ -132,6 +132,8 @@
 
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     KwabzStore.init();
+    if (!KwabzUtils.requireLogin()) throw new Error("Auth required");
+    KwabzUtils.initAuthNavigation();
 
     const sellerId = KwabzUtils.getParam('id');
 
